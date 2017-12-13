@@ -1,12 +1,12 @@
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 import App from './App';
+import { spotifyToken } from '../secrets';
 
 window.onSpotifyPlayerAPIReady = () => {
-  const token = 'BQDhaM6CABMmfZ272BOZHBqrjR1ZgYZyVnPgRBVEmrWSvmBRSzy9Qo1J2gPgC-xeEBOqUnjqJVTxKWfHY47jV66n0Bl7HQkx_1TVCieMYnv3kk7O4NrLfp1FT2dN008UNetbxjvjzLCytm4QJ_PmQygRDaOM_6rx8izp';
   const player = new Spotify.Player({
     name: 'Collaborative Play Queue',
-    getOAuthToken: cb => { cb(token); }
+    getOAuthToken: cb => { cb(spotifyToken); }
   });
 
   // Error handling
