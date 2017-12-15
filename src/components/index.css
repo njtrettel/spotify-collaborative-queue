@@ -1,0 +1,41 @@
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+}
+
+/* MAIN APP */
+.main-app {
+
+}
+
+.main-app__header {
+
+}
+
+/* HEADER */
+.header {
+  width: 100%;
+  background-color: black;
+  color: white;
+  padding: 1rem;
+}
+
+/* SPOTIFY CONTENT */
+.spotify-content {
+  margin: 0 !important;
+}
+
+.spotify-content__wrapper {
+  padding: 0 !important;
+}
+
+.spotify-content__column {
+  padding: 1rem;
+}
+
+.spotify-content__column--sidebar {
+  background-color: #AAA;
+}

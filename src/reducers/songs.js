@@ -2,7 +2,7 @@ import {
   GET_SONGS,
   GET_SONGS_SUCCESS,
   GET_SONGS_FAIL
-} from '../actions/music.js';
+} from '../actions/songs.js';
 
 const songs = (state = { loading: false, error: false, data: null }, action) => {
   switch (action.type) {

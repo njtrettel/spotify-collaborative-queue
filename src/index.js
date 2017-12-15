@@ -1,8 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import App from './components/App';
 import { spotifyToken } from '../secrets';
-import collaborativeQueueApp from '../reducers';
+import collaborativeQueueApp from './reducers';
+import 'semantic-ui-css/semantic.min.css';
+
 
 window.onSpotifyPlayerAPIReady = () => {
   const player = new Spotify.Player({
@@ -23,7 +27,7 @@ window.onSpotifyPlayerAPIReady = () => {
     console.log('Ready with Device ID', data.device_id);
 
     render(
-      <Provider store={createStore(collaborativeQueueApp)}
+      <Provider store={createStore(collaborativeQueueApp)}>
         <App player={player} playerData={data} />
       </Provider>,
       document.getElementById('root')
