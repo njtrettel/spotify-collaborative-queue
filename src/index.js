@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import App from './App';
 import { spotifyToken } from '../secrets';
+import collaborativeQueueApp from '../reducers';
 
 window.onSpotifyPlayerAPIReady = () => {
   const player = new Spotify.Player({
@@ -22,7 +23,9 @@ window.onSpotifyPlayerAPIReady = () => {
     console.log('Ready with Device ID', data.device_id);
 
     render(
-      <App player={player} playerData={data} />,
+      <Provider store={createStore(collaborativeQueueApp)}
+        <App player={player} playerData={data} />
+      </Provider>,
       document.getElementById('root')
     );
   });
