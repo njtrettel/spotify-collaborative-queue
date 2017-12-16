@@ -11,21 +11,30 @@ body {
 
 }
 
-.main-app__header {
+.main-app__bar {
+  width: 100%;
+  background-color: black;
+  color: white;
+}
 
+.main-app__bar--header {
+  padding: 1rem;
+}
+
+.main-app__bar--footer {
+  padding: .5rem 1rem;
+}
+
+.main-app__content {
+  margin: 0 !important;
 }
 
 /* HEADER */
 .header {
-  width: 100%;
-  background-color: black;
-  color: white;
-  padding: 1rem;
 }
 
 /* SPOTIFY CONTENT */
 .spotify-content {
-  margin: 0 !important;
 }
 
 .spotify-content__wrapper {
@@ -38,4 +47,8 @@ body {
 
 .spotify-content__column--sidebar {
   background-color: #AAA;
+}
+
+/* FOOTER */
+.footer {
 }
