@@ -13,10 +13,12 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.5",
+    "history": "^4.7.2",
     "parcel-bundler": "^1.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
     "redux": "^3.7.2",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.77.1"

@@ -3,3 +3,4 @@ node_modules
 dist
 .cache
 secrets.js
+*-lock.json
