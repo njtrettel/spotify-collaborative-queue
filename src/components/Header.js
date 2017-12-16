@@ -5,7 +5,7 @@ const Header = (props) => {
   const classes = classnames(props.className, 'header');
   return (
     <div className={classes}>
-      Hello World!!
+      Spotify Collaborative Queue
     </div>
   );
 };

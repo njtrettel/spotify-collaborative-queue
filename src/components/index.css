@@ -56,6 +56,22 @@ body {
   background-color: #AAA;
 }
 
+/* SIDEBAR */
+.sidebar__title {
+  padding: 1rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.sidebar__links {
+  margin-left: 1.25rem;
+  padding-left: 4px;
+}
+
+.sidebar__link {
+  padding: .5em 0;
+}
+
 /* FOOTER */
 .footer {
 }
