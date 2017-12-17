@@ -20,15 +20,20 @@ const generateRandomString = function(length) {
 
 const stateKey = 'spotify_auth_state';
 const redirectUri = 'http://localhost:1234/callback';
+const scope =  'user-read-private user-read-email playlist-read-private \
+playlist-modify-private playlist-modify-public playlist-read-collaborative \
+user-top-read user-read-recently-played user-library-read user-library-modify \
+user-read-currently-playing user-modify-playback-state user-read-playback-state \
+user-follow-modify user-follow-read streaming';
 
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 app.get('/', (req, res) => {
   const loggedIn = req.cookies ? req.cookies['accessToken'] : null;
   if (!loggedIn) {
     res.redirect('/login');
   } else {
-    res.sendFile('/index.html');
+    res.sendFile(__dirname + '/public/dist/index.html');
   }
 });
 
@@ -36,7 +41,6 @@ app.get('/login', (req, res) => {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  const scope = 'user-read-private user-read-email';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',

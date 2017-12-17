@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "parcel build index.html --public-url ./ --no-minify",
-    "watch": "parcel watch index.html --public-url ./",
+    "build": "parcel build index.html --out-dir public/dist --public-url ./dist --no-minify",
     "start": "parcel index.html"
   },
   "author": "",
