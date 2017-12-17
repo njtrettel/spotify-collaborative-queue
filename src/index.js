@@ -3,15 +3,30 @@ import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './components/App';
-import { spotifyToken } from '../secrets';
 import collaborativeQueueApp from './reducers';
 import 'semantic-ui-css/semantic.min.css';
 
+const getCookie = (cookieName) => {
+  var name = cookieName + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+};
 
 window.onSpotifyPlayerAPIReady = () => {
+  const accessToken = getCookie('accessToken');
   const player = new Spotify.Player({
     name: 'Collaborative Play Queue',
-    getOAuthToken: cb => { cb(spotifyToken); }
+    getOAuthToken: cb => { cb(accessToken); }
   });
 
   // Error handling
