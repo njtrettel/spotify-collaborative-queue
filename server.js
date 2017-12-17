@@ -20,11 +20,23 @@ const generateRandomString = function(length) {
 
 const stateKey = 'spotify_auth_state';
 const redirectUri = 'http://localhost:1234/callback';
-const scope =  'user-read-private user-read-email playlist-read-private \
-playlist-modify-private playlist-modify-public playlist-read-collaborative \
-user-top-read user-read-recently-played user-library-read user-library-modify \
-user-read-currently-playing user-modify-playback-state user-read-playback-state \
-user-follow-modify user-follow-read streaming';
+const scope =  'user-read-private \
+user-read-email \
+user-read-birthdate \
+playlist-read-private \
+playlist-modify-private \
+playlist-modify-public \
+playlist-read-collaborative \
+user-top-read \
+user-read-recently-played \
+user-library-read \
+user-library-modify \
+user-read-currently-playing \
+user-modify-playback-state \
+user-read-playback-state \
+user-follow-modify \
+user-follow-read \
+streaming';
 
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());

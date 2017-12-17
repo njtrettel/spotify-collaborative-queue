@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "parcel build index.html --out-dir public/dist --public-url ./dist --no-minify",
+    "watch": "parcel watch index.html --out-dir public/dist --public-url ./dist",
     "start": "parcel index.html"
   },
   "author": "",
