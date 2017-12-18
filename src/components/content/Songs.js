@@ -17,7 +17,7 @@ const renderSongsTable = (props) => (
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {_.map(props.songs.data, (song, i) => (
+      {_.map(_.get(props.songs, 'data.songs', []), (song, i) => (
         <Table.Row key={i} className="songs__song">
           <Table.Cell>
             <Header as='h4'>
