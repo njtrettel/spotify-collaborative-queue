@@ -109,7 +109,7 @@ class Songs extends React.Component {
     const deviceId = _.get(this.props, 'deviceId');
     const songs = _.get(this.props, 'songs', { error: 'Empty songs' });
     if (songs.loading) {
-      return <Segment loading />;
+      return <Segment loading basic size="large" className="context__loading" />;
     }
     if (!!songs.error) {
       return <div>{songs.error.toString()}</div>;

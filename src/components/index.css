@@ -144,6 +144,11 @@ body {
   cursor: pointer;
 }
 
+/* CONTEXT */
+.context__loading {
+  min-height: 8.5rem;
+}
+
 /* FOOTER */
 .footer {
   position: fixed;
