@@ -34,8 +34,7 @@ const Songs = (props) => {
     return <Segment loading />;
   }
   if (!!songs.error) {
-    console.error(songs.error);
-    return <div>There was an error</div>;
+    return <div>{songs.error.toString()}</div>;
   }
   return (
     <div className={classes}>
