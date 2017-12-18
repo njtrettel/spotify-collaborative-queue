@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import classnames from 'classnames';
 import { Table, Segment, Header } from 'semantic-ui-react';
 
@@ -12,6 +13,31 @@ const renderSectionHeader = (sectionTitle) => (
   </Table.Header>
 );
 
+const renderSectionBody = (contextSection) => {
+  if (contextSection.loading) {
+    return <Segment loading />;
+  }
+  if (contextSection.error) {
+    return <div>{contextSection.error}</div>;
+  }
+  return (
+    <Table.Body>
+      {_.map(_.get(contextSection, 'songs', []), (song, i) => (
+        <Table.Row key={i} className="context__song">
+          <Table.Cell>
+            <Header as='h4'>
+              <Header.Content className="context__song--title">
+                  {_.get(song, 'title')}
+                <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
+              </Header.Content>
+            </Header>
+          </Table.Cell>
+        </Table.Row>
+      ))}
+    </Table.Body>
+  );
+};
+
 const renderNowPlaying = (props) => {
 
 };
@@ -20,24 +46,11 @@ const renderQueue = (props) => {
 
 };
 
-const renderUpNext = (props) => {
+const renderUpNext = (upNext) => {
   return (
     <Table basic='very' celled>
       {renderSectionHeader('Up Next')}
-      <Table.Body>
-        {_.map(_.get(props.context, 'upNext', []), (song, i) => (
-          <Table.Row key={i} className="context__song">
-            <Table.Cell>
-              <Header as='h4'>
-                <Header.Content className="context__song--title">
-                    {_.get(song, 'title')}
-                  <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
-                </Header.Content>
-              </Header>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
+      {renderSectionBody(upNext)}
     </Table>
   );
 };
@@ -46,6 +59,7 @@ const Context = (props) => {
   const classes = classnames(props.className, 'context');
   return (
     <div className={classes}>
+      {renderUpNext(_.get(props.context, 'upNext'))}
     </div>
   );
 };
