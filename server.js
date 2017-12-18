@@ -40,14 +40,6 @@ streaming';
 
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
-app.get('*', (req, res) => {
-  const loggedIn = req.cookies ? req.cookies['accessToken'] : null;
-  if (!loggedIn) {
-    res.redirect('/login');
-  } else {
-    res.sendFile(__dirname + '/public/dist/index.html');
-  }
-});
 
 app.get('/login', (req, res) => {
   const state = generateRandomString(16);
@@ -99,6 +91,16 @@ app.get('/callback', (req, res) => {
     });
   }
 });
+
+app.get('*', (req, res) => {
+  const loggedIn = req.cookies ? req.cookies['accessToken'] : null;
+  if (!loggedIn) {
+    res.redirect('/login');
+  } else {
+    res.sendFile(__dirname + '/public/dist/index.html');
+  }
+});
+
 
 server.listen(1234);
 console.log('server running');
