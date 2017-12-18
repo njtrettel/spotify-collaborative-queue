@@ -25,12 +25,12 @@ const NowPlaying = (props) => {
 
   return (
     <div className={classes}>
-      <div className="now-playing__previous" onClick={() => player.previousTrack()}>&#8630;</div>
+      <div className="now-playing__previous" onClick={() => !disabled && player.previousTrack()}>&#8630;</div>
       <Link to="/context" className="now-playing__song-info">
         <div className="now-playing__song-info--title">{title || '-----'}</div>
         <div className="now-playing__song-info--artists">{artists || '---'}</div>
       </Link>
-      <div className="now-playing__next" onClick={() => player.nextTrack()}>&#8631;</div>
+      <div className="now-playing__next" onClick={() => !disabled && player.nextTrack()}>&#8631;</div>
     </div>
   );
 };
