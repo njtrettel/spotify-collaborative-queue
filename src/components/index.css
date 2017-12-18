@@ -69,7 +69,14 @@ body {
 }
 
 .sidebar__link {
+  display: block;
   padding: .5em 0;
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar__link:hover {
+  color: #1e70bf
 }
 
 /* FOOTER */
