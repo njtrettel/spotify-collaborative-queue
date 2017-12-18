@@ -49,6 +49,7 @@ class Songs extends React.Component {
           <Table.HeaderCell>
             <Search className="songs__filter" onSearchChange={this.onChange} open={false} size="big" />
           </Table.HeaderCell>
+          <Table.HeaderCell />
         </Table.Row>
       </Table.Header>
     );
@@ -61,13 +62,18 @@ class Songs extends React.Component {
         <Table.Body>
           {_.map(filterSongs(_.get(this.props.songs, 'songs', []), this.state.filter), (song, i) => (
             <Table.Row key={i} className="songs__song">
-              <Table.Cell>
+              <Table.Cell className="songs__song--title">
                 <Header as='h4'>
-                  <Header.Content className="songs__song--title songs__song--clickable" onClick={() => this.props.playSong(this.props.deviceId, song)}>
+                  <Header.Content className="songs__song--clickable" onClick={() => this.props.playSong(this.props.deviceId, song)}>
                       {_.get(song, 'title')}
                     <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
                   </Header.Content>
                 </Header>
+              </Table.Cell>
+              <Table.Cell className="songs__song--actions">
+                <Button basic compact className="songs__action--queue">
+                  Queue
+                </Button>
               </Table.Cell>
             </Table.Row>
           ))}
