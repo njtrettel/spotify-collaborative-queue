@@ -4,28 +4,25 @@ import {
   GET_SONGS_FAIL
 } from '../actions/songs.js';
 
-const songs = (state = { loading: false, error: false, data: {} }, action) => {
+const songs = (state = { loading: false, error: false, songs: [] }, action) => {
   switch (action.type) {
     case GET_SONGS:
       return {
         loading: true,
         error: false,
-        data: state.data
+        songs: state.songs
       };
     case GET_SONGS_SUCCESS:
       return {
         loading: false,
         error: false,
-        data: {
-          songs: action.songs,
-          uris: action.uris
-        }
+        songs: action.songs
       };
     case GET_SONGS_FAIL:
       return {
         loading: false,
         error: action.error,
-        data: state.data
+        songs: state.songs
       };
     default:
       return state;

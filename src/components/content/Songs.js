@@ -38,9 +38,8 @@ class Songs extends React.Component {
             <Button primary compact
               className="songs__shuffle-play"
               onClick={() => this.props.playMultipleSongs(this.props.deviceId,
-                _.get(this.props.songs, 'data.songs', []),
-                _.get(this.props.songs, 'data.uris', []))
-              }
+                _.get(this.props.songs, 'songs', [])
+              )}
             >
               Shuffle Play
             </Button>
@@ -60,7 +59,7 @@ class Songs extends React.Component {
       <Table basic='very' celled>
         {this.renderSongsTableHeader()}
         <Table.Body>
-          {_.map(filterSongs(_.get(this.props.songs, 'data.songs', []), this.state.filter), (song, i) => (
+          {_.map(filterSongs(_.get(this.props.songs, 'songs', []), this.state.filter), (song, i) => (
             <Table.Row key={i} className="songs__song">
               <Table.Cell>
                 <Header as='h4'>

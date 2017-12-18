@@ -71,38 +71,44 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
 };
 
 // this dispatches the same PLAY_SONG actions as the singular song version above
-// but also toggles shuffle
-export const playMultipleSongs = (deviceId, songs, uris) => (dispatch, getState) => {
+export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
   const accessToken = getCookie('accessToken');
-  const toggleShuffleOptions = {
-    url: toggleShuffleUrl(deviceId),
+  const shuffledSongs = _.shuffle(songs);
+  const shuffledUris = _.map(shuffledSongs, 'uri');
+  const playOptions = {
+    url: playSongUrl(deviceId),
     headers: {
       'Authorization': 'Bearer ' + accessToken
     },
+    body: {
+      'uris': shuffledUris
+    },
     json: true
   };
-  dispatch(toggleShuffleOnAction());
-  return rp.put(toggleShuffleOptions).then(() => {
-    console.log('toggled shuffle');
-    dispatch(toggleShuffleOnSuccessAction());
-    const playOptions = {
-      url: playSongUrl(deviceId),
-      headers: {
-        'Authorization': 'Bearer ' + accessToken
-      },
-      body: {
-        'uris': uris
-      },
-      json: true
-    };
 
-    dispatch(playSongAction());
-    return rp.put(playOptions).then(() => {
-      return dispatch(playSongSuccessAction(songs));
-    }).catch(error => {
-      return dispatch(playSongFailAction(error));
-    });
+  dispatch(playSongAction());
+  return rp.put(playOptions).then(() => {
+    return dispatch(playSongSuccessAction(shuffledSongs));
   }).catch(error => {
-    dispatch(toggleShuffleOnFailAction(error));
+    return dispatch(playSongFailAction(error));
   });
 };
+
+/* Shuffle stuff
+
+const toggleShuffleOptions = {
+  url: toggleShuffleUrl(deviceId),
+  headers: {
+    'Authorization': 'Bearer ' + accessToken
+  },
+  json: true
+};
+dispatch(toggleShuffleOnAction());
+return rp.put(toggleShuffleOptions).then(() => {
+  console.log('toggled shuffle');
+  return dispatch(toggleShuffleOnSuccessAction());
+}).catch(error => {
+  return dispatch(toggleShuffleOnFailAction(error));
+});
+
+*/

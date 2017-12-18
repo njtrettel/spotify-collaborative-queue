@@ -16,19 +16,13 @@ const authOptions = (accessToken, offset) => ({
   json: true
 });
 
-const parseSongs = (songs) => {
-  let uris = [];
-  const parsedSongs = _.reduce(songs, (result, track) => {
+const parseSongs = (songs) => (
+  _.reduce(songs, (result, track) => {
     const song = _.get(track, 'track', {});
     const reducedSong = reduceSpotifyTrack(song);
-    uris = _.concat(uris, reducedSong.uri);
     return _.concat(result, reducedSong);
-  }, []);
-  return {
-    uris,
-    parsedSongs
-  };
-};
+  }, [])
+);
 
 const getSongsAction = () => {
   return {
@@ -36,11 +30,10 @@ const getSongsAction = () => {
   };
 };
 
-const getSongsSuccessAction = (songs, uris) => {
+const getSongsSuccessAction = (songs) => {
   return {
     type: GET_SONGS_SUCCESS,
-    songs,
-    uris
+    songs
   };
 };
 
@@ -67,15 +60,15 @@ export const getSongs = () => (dispatch, getState) => {
         }
         Promise.all(_.map(offsets, (offset) => rp.get(authOptions(accessToken, offset)) )).then(requestBodies => {
           const allSubRequestSongs = _.flatMap(requestBodies, (body) => _.get(body, 'items', []));
-          const { parsedSongs: allParsedSongs, uris } = parseSongs(_.concat(songs, allSubRequestSongs));
-          dispatch(getSongsSuccessAction(allParsedSongs, uris));
+          const allParsedSongs = parseSongs(_.concat(songs, allSubRequestSongs));
+          dispatch(getSongsSuccessAction(allParsedSongs));
         }).catch(error => {
           throw error;
           dispatch(getSongsFailAction(error));
         });
       } else {
-        const { parsedSongs, uris } = parseSongs(songs);
-        return dispatch(getSongsSuccessAction(parsedSongs, uris));
+        const parsedSongs = parseSongs(songs);
+        return dispatch(getSongsSuccessAction(parsedSongs));
       }
     } else {
       return dispatch(getSongsFailAction(error));
