@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getSongs } from '../actions/songs';
 import _ from 'lodash';
+import Songs from './content/Songs'
 
 const actions = {
   getSongs
@@ -21,12 +22,11 @@ class Content extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    const songs = _.get(this.props, 'songs', []);
     return (
       <div className="spotify-content__main">
-        Welcome to the collab Q
         <Route exact path="/" component={() => <Redirect to="/songs" />}/>
-        <Route path="/songs" component={() => <div>Hello World 2</div>}/>
+        <Route path="/songs" component={() => <Songs songs={songs} />}/>
       </div>
     );
   }
