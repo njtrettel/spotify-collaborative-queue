@@ -6,10 +6,20 @@ import { Table, Segment, Header } from 'semantic-ui-react';
 
 const stateToProps = (state, ownProps) => {
   const context = state.context;
+  const nowPlaying = state.nowPlaying;
   return {
-    context
+    context, nowPlaying
   };
 };
+
+const renderSong = (song) => (
+  <Header as='h4'>
+    <Header.Content className="context__song--title">
+        {_.get(song, 'title')}
+      <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
+    </Header.Content>
+  </Header>
+);
 
 const renderSection = (contextSection) => {
   if (contextSection.loading) {
@@ -24,12 +34,7 @@ const renderSection = (contextSection) => {
         {_.map(_.get(contextSection, 'songs', []), (song, i) => (
           <Table.Row key={i} className="context__song">
             <Table.Cell>
-              <Header as='h4'>
-                <Header.Content className="context__song--title">
-                    {_.get(song, 'title')}
-                  <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
-                </Header.Content>
-              </Header>
+              {renderSong(song)}
             </Table.Cell>
           </Table.Row>
         ))}
@@ -44,12 +49,17 @@ const renderNowPlaying = (props) => {
 
 const Context = (props) => {
   const classes = classnames(props.className, 'context');
+  const nowPlaying = _.get(props, 'nowPlaying', {});
+  const queue = _.get(props.context, 'queue');
+  const upNext = _.get(props.context, 'upNext');
   return (
     <div className={classes}>
+      <Header as='h1' className="context__header">Now Playing</Header>
+      {_.some(nowPlaying) ? renderSong(nowPlaying) : null}
       <Header as='h1' className="context__header">Queue</Header>
-      {renderSection(_.get(props.context, 'queue'))}
+      {_.some(queue.songs) ? renderSection(queue) : null}
       <Header as='h1' className="context__header">Up Next</Header>
-      {renderSection(_.get(props.context, 'upNext'))}
+      {_.some(upNext.songs) ? renderSection(upNext) : null}
     </div>
   );
 };
