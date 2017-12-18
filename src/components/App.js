@@ -24,10 +24,7 @@ const App = (props) => {
     const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
     const duration = _.get(state, 'duration', 1);
     if ((currentTrack === previousTrack) && (duration === 0)) {
-      console.log('song ended');
-      return props.nextSong(deviceId).then((result) => {
-        console.log(result);
-      });
+      return props.nextSong(deviceId);
     }
     props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
   });
