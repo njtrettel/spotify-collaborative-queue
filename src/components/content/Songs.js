@@ -43,7 +43,11 @@ class Songs extends React.Component {
             <Header as='h1' className="songs__header">Songs</Header>
             <Button primary compact
               className="songs__shuffle-play"
-              onClick={() => this.props.playMultipleSongs(this.props.deviceId, _.get(this.props.songs, 'data.uris', []))}>
+              onClick={() => this.props.playMultipleSongs(this.props.deviceId,
+                _.get(this.props.songs, 'data.songs', []),
+                _.get(this.props.songs, 'data.uris', []))
+              }
+            >
               Shuffle Play
             </Button>
           </Table.HeaderCell>

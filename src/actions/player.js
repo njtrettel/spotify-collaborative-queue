@@ -18,10 +18,10 @@ const playSongAction = () => {
   };
 };
 
-const playSongSuccessAction = (song) => {
+const playSongSuccessAction = (songs) => {
   return {
     type: PLAY_SONG_SUCCESS,
-    song
+    songs
   };
 };
 
@@ -64,7 +64,7 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
 
   dispatch(playSongAction());
   return rp.put(playOptions).then(() => {
-    return dispatch(playSongSuccessAction());
+    return dispatch(playSongSuccessAction([song]));
   }).catch(error => {
     return dispatch(playSongFailAction(error));
   });
@@ -72,7 +72,7 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
 
 // this dispatches the same PLAY_SONG actions as the singular song version above
 // but also toggles shuffle
-export const playMultipleSongs = (deviceId, uris) => (dispatch, getState) => {
+export const playMultipleSongs = (deviceId, songs, uris) => (dispatch, getState) => {
   const accessToken = getCookie('accessToken');
   const toggleShuffleOptions = {
     url: toggleShuffleUrl(deviceId),
@@ -98,7 +98,7 @@ export const playMultipleSongs = (deviceId, uris) => (dispatch, getState) => {
 
     dispatch(playSongAction());
     return rp.put(playOptions).then(() => {
-      return dispatch(playSongSuccessAction());
+      return dispatch(playSongSuccessAction(songs));
     }).catch(error => {
       return dispatch(playSongFailAction(error));
     });
