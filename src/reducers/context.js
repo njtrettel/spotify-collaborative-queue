@@ -5,7 +5,10 @@ import {
   PLAY_SONG_FAIL,
   QUEUE_SONG,
   QUEUE_SONG_SUCCESS,
-  QUEUE_SONG_FAIL
+  QUEUE_SONG_FAIL,
+  NEXT_SONG,
+  NEXT_SONG_SUCCESS,
+  NEXT_SONG_FAIL
 } from '../actions/player.js';
 
 const context = (state = { upNext: { loading: false, error: null, songs: [] }, queue: { loading: false, error: null, songs: [] } }, action) => {
@@ -24,7 +27,7 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
         upNext: {
           loading: false,
           error: null,
-          songs: action.songs
+          songs: action.songs || state.upNext.songs
         },
         queue: state.queue
       };
@@ -63,6 +66,45 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           error: action.error,
           songs: state.queue.songs
         }
+      };
+    case NEXT_SONG:
+      return {
+        upNext: !action.playingFromQueue ? {
+          loading: true,
+          error: null,
+          songs: state.upNext.songs
+        } : state.upNext,
+        queue: action.playingFromQueue ? {
+          loading: true,
+          error: null,
+          songs: state.queue.songs
+        } : state.queue
+      };
+    case NEXT_SONG_SUCCESS:
+      return {
+        upNext: {
+          loading: false,
+          error: null,
+          songs: !action.playingFromQueue ? _.slice(state.upNext.songs, 1) || [] : state.upNext.songs
+        },
+        queue: {
+          loading: false,
+          error: null,
+          songs: action.playingFromQueue ? _.slice(state.queue.songs, 1) || [] : state.queue.songs
+        }
+      };
+    case NEXT_SONG_FAIL:
+      return {
+        upNext: !action.playingFromQueue ? {
+          loading: false,
+          error: action.error,
+          songs: state.upNext.Songs
+        } : state.upNext.songs,
+        queue: action.playingFromQueue ? {
+          loading: false,
+          error: action.error,
+          songs: state.queue.songs
+        } : state.queue.songs
       };
     default:
       return state;

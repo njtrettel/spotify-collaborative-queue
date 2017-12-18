@@ -8,6 +8,9 @@ export const PLAY_SONG_FAIL = 'PLAY_SONG_FAIL';
 export const QUEUE_SONG = 'QUEUE_SONG';
 export const QUEUE_SONG_SUCCESS = 'QUEUE_SONG_SUCCESS';
 export const QUEUE_SONG_FAIL = 'QUEUE_SONG_FAIL';
+export const NEXT_SONG = 'NEXT_SONG';
+export const NEXT_SONG_SUCCESS = 'NEXT_SONG_SUCCESS';
+export const NEXT_SONG_FAIL = 'NEXT_SONG_FAIL';
 
 const playSongUrl = (deviceId) => `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
 const toggleShuffleUrl = (deviceId) => `https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=${deviceId}`;
@@ -18,6 +21,7 @@ const playSongAction = () => {
   };
 };
 
+// `songs` will become upNext
 const playSongSuccessAction = (songs) => {
   return {
     type: PLAY_SONG_SUCCESS,
@@ -51,7 +55,27 @@ const queueSongFailAction = (error) => {
   };
 };
 
+const nextSongAction = (playingFromQueue) => {
+  return {
+    type: NEXT_SONG,
+    playingFromQueue
+  };
+};
 
+const nextSongSuccessAction = (playingFromQueue, song) => {
+  return {
+    type: NEXT_SONG_SUCCESS,
+    playingFromQueue,
+    song
+  };
+};
+
+const nextSongFailAction = (error) => {
+  return {
+    type: NEXT_SONG_FAIL,
+    error
+  };
+};
 
 export const playSong = (deviceId, song) => (dispatch, getState) => {
   const accessToken = getCookie('accessToken');
@@ -68,7 +92,7 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
 
   dispatch(playSongAction());
   return rp.put(playOptions).then(() => {
-    return dispatch(playSongSuccessAction([song]));
+    return dispatch(playSongSuccessAction());
   }).catch(error => {
     return dispatch(playSongFailAction(error));
   });
@@ -78,21 +102,21 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
 export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
   const accessToken = getCookie('accessToken');
   const shuffledSongs = _.shuffle(songs);
-  const shuffledUris = _.map(shuffledSongs, 'uri');
+  const uriToPlay = _.get(shuffledSongs[0], 'uri', '');
   const playOptions = {
     url: playSongUrl(deviceId),
     headers: {
       'Authorization': 'Bearer ' + accessToken
     },
     body: {
-      'uris': shuffledUris
+      'uris': [uriToPlay]
     },
     json: true
   };
 
   dispatch(playSongAction());
   return rp.put(playOptions).then(() => {
-    return dispatch(playSongSuccessAction(shuffledSongs));
+    return dispatch(playSongSuccessAction(_.slice(shuffledSongs, 1)));
   }).catch(error => {
     return dispatch(playSongFailAction(error));
   });
@@ -100,7 +124,35 @@ export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
 
 export const queueSong = (song) => (dispatch, getState) => {
   dispatch(queueSongAction());
-  dispatch(queueSongSuccessAction(song));
+  return Promise.resolve(dispatch(queueSongSuccessAction(song)));
+};
+
+export const nextSong = (deviceId) => (dispatch, getState) => {
+  const accessToken = getCookie('accessToken');
+  const context = getState().context;
+  const queue = _.get(context.queue, 'songs', []);
+  const upNext = _.get(context.upNext, 'songs', []);
+  const playingFromQueue = !_.isEmpty(queue);
+  const nextSongToPlay = playingFromQueue ? queue[0] : upNext[0];
+
+  dispatch(nextSongAction(playingFromQueue));
+  if (nextSongToPlay) {
+    const playOptions = {
+      url: playSongUrl(deviceId),
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      },
+      body: {
+        'uris': [nextSongToPlay.uri]
+      },
+      json: true
+    };
+
+    return rp.put(playOptions)
+      .then(() => dispatch(nextSongSuccessAction(playingFromQueue, nextSongToPlay)))
+      .catch((error) => dispatch(nextSongFailAction(error)));
+  }
+  return Promise.resolve(dispatch(nextSongSuccessAction()));
 };
 
 /* Shuffle stuff
