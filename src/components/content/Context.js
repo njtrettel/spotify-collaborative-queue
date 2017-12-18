@@ -1,7 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import classnames from 'classnames';
 import { Table, Segment, Header } from 'semantic-ui-react';
+
+const stateToProps = (state, ownProps) => {
+  const context = state.context;
+  return {
+    context
+  };
+};
 
 const renderSectionHeader = (sectionTitle) => (
   <Table.Header>
@@ -70,4 +78,4 @@ const Context = (props) => {
   );
 };
 
-export default Context;
+export default connect(stateToProps)(Context);

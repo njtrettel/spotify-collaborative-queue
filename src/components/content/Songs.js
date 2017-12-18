@@ -1,8 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { getSongs } from '../../actions/songs';
+import { playSong, playMultipleSongs, queueSong } from '../../actions/player';
 import classnames from 'classnames';
 import _ from 'lodash';
 import { Table, Segment, Header, Button, Search } from 'semantic-ui-react';
-import { playSong, playMultipleSongs } from '../../actions/player';
+
+const actions = {
+  getSongs,
+  playSong,
+  playMultipleSongs,
+  queueSong
+};
+
+const stateToProps = (state, ownProps) => {
+  const songs = state.songs;
+  return {
+    songs
+  };
+};
 
 const filterSongs = (songs, filter) => {
   if (!filter) {
@@ -23,6 +39,12 @@ class Songs extends React.Component {
     this.state = {
       filter: ''
     };
+  }
+
+  componentWillMount() {
+    if (_.isEmpty(_.get(this.props.songs, 'songs'))) {
+      this.props.getSongs();
+    }
   }
 
   onChange(e) {
@@ -100,4 +122,4 @@ class Songs extends React.Component {
   }
 }
 
-export default Songs;
+export default connect(stateToProps, actions)(Songs);
