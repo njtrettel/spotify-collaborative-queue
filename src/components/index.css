@@ -57,6 +57,11 @@ body {
 }
 
 /* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 3rem;
+}
+
 .sidebar__title {
   padding: 1rem 0;
   font-size: 1.1rem;
