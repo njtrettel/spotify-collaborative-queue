@@ -12,7 +12,7 @@ const generateRandomString = function(length) {
   let text = '';
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
@@ -40,7 +40,7 @@ streaming';
 
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   const loggedIn = req.cookies ? req.cookies['accessToken'] : null;
   if (!loggedIn) {
     res.redirect('/login');

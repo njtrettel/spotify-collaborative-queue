@@ -1,22 +1,23 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import App from './components/App';
 import collaborativeQueueApp from './reducers';
+import App from './components/App';
 import 'semantic-ui-css/semantic.min.css';
 
 const getCookie = (cookieName) => {
-  var name = cookieName + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
+  const name = cookieName + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
     while (c.charAt(0) == ' ') {
-        c = c.substring(1);
+      c = c.substring(1);
     }
     if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
+      return c.substring(name.length, c.length);
     }
   }
   return "";
@@ -41,8 +42,13 @@ window.onSpotifyPlayerAPIReady = () => {
   player.on('ready', data => {
     console.log('Ready with Device ID', data.device_id);
 
+    const store = createStore(
+      collaborativeQueueApp,
+      applyMiddleware(thunk)
+    );
+
     render(
-      <Provider store={createStore(collaborativeQueueApp)}>
+      <Provider store={store}>
         <App player={player} playerData={data} />
       </Provider>,
       document.getElementById('root')

@@ -4,7 +4,7 @@ import {
   GET_SONGS_FAIL
 } from '../actions/songs.js';
 
-const songs = (state = { loading: false, error: false, data: null }, action) => {
+const songs = (state = { loading: false, error: false, data: [] }, action) => {
   switch (action.type) {
     case GET_SONGS:
       return {
