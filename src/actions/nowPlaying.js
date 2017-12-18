@@ -12,5 +12,5 @@ const updateNowPlayingAction = (song) => {
 };
 
 export const updateNowPlaying = (song) => (dispatch, getState) => {
-  dispatch(updateNowPlayingAction(song));
+  return dispatch(updateNowPlayingAction(song));
 };

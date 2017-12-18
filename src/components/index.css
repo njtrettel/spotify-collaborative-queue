@@ -107,12 +107,21 @@ body {
   font-size: 1.5rem;
   flex-grow: 0;
 }
+
 .now-playing__next {
   padding-right: 1rem;
 }
 
+.now-playing__next:hover {
+  cursor: pointer;
+}
+
 .now-playing__previous {
   padding-left: 1rem;
+}
+
+.now-playing__previous:hover {
+  cursor: pointer;
 }
 
 .now-playing__song-info {
@@ -121,6 +130,16 @@ body {
 }
 
 /* SONGS */
+.songs__header {
+  display: inline;
+  vertical-align: bottom;
+  margin-right: 1rem !important;
+}
+
+.songs__shuffle-play {
+  background-color: #1db954 !important;
+}
+
 .songs__song--clickable:hover {
   cursor: pointer;
 }
