@@ -3,7 +3,7 @@ import {
 } from '../actions/nowPlaying.js';
 import { reduceSpotifyTrack } from '../util';
 
-const nowPlaying = (state = { song: {} }, action) => {
+const nowPlaying = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_NOW_PLAYING:
       return reduceSpotifyTrack(action.song);

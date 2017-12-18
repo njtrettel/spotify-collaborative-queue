@@ -1,10 +1,11 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getSongs } from '../actions/songs';
 import { playSong, playMultipleSongs } from '../actions/player';
 import _ from 'lodash';
 import Songs from './content/Songs'
+import Context from './content/Context';
 
 const actions = {
   getSongs,
@@ -13,11 +14,15 @@ const actions = {
 };
 
 const playActions = ['playSong', 'playMultipleSongs'];
+const songsProps = ['songs', 'deviceId'];
+const contextProps = ['context', 'nowPlaying'];
 
 const stateToProps = (state, ownProps) => {
   const songs = state.songs;
+  const context = state.context;
+  const nowPlaying = state.nowPlaying;
   return {
-    songs
+    songs, context, nowPlaying
   };
 };
 
@@ -32,10 +37,11 @@ class Content extends React.Component {
     return (
       <div className="spotify-content__main">
         <Route exact path="/" component={() => <Redirect to="/songs" />}/>
-        <Route path="/songs" component={() => <Songs songs={songs} deviceId={deviceId} {..._.pick(this.props, playActions)} />}/>
+        <Route path="/songs" component={() => <Songs {..._.pick(this.props, [...songsProps, ...playActions])} />}/>
+        <Route path="/context" component={() => <Context {..._.pick(this.props, contextProps)} />}/>
       </div>
     );
   }
 };
 
-export default connect(stateToProps, actions)(Content);
+export default withRouter(connect(stateToProps, actions)(Content));

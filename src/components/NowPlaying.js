@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import classnames from 'classnames';
 import { Segment } from 'semantic-ui-react';
@@ -25,10 +26,10 @@ const NowPlaying = (props) => {
   return (
     <div className={classes}>
       <div className="now-playing__previous" onClick={() => player.previousTrack()}>&#8630;</div>
-      <div className="now-playing__song-info">
+      <Link to="/context" className="now-playing__song-info">
         <div className="now-playing__song-info--title">{title || '-----'}</div>
         <div className="now-playing__song-info--artists">{artists || '---'}</div>
-      </div>
+      </Link>
       <div className="now-playing__next" onClick={() => player.nextTrack()}>&#8631;</div>
     </div>
   );
