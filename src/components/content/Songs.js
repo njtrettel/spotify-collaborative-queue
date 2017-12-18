@@ -1,14 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import classnames from 'classnames';
 import _ from 'lodash';
 import { Table, Segment, Header, Button, Search } from 'semantic-ui-react';
 import { playSong, playMultipleSongs } from '../../actions/player';
-
-const actions = {
-  playSong,
-  playMultipleSongs
-};
 
 const filterSongs = (songs, filter) => {
   if (!filter) {
@@ -101,4 +95,4 @@ class Songs extends React.Component {
   }
 }
 
-export default connect(null, actions)(Songs);
+export default Songs;
