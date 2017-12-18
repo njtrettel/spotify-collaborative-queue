@@ -42,8 +42,13 @@ const renderNowPlaying = (props) => {
 
 };
 
-const renderQueue = (props) => {
-
+const renderQueue = (queue) => {
+  return (
+    <Table basic='very' celled>
+      {renderSectionHeader('Queue')}
+      {renderSectionBody(queue)}
+    </Table>
+  );
 };
 
 const renderUpNext = (upNext) => {
@@ -59,6 +64,7 @@ const Context = (props) => {
   const classes = classnames(props.className, 'context');
   return (
     <div className={classes}>
+      {renderQueue(_.get(props.context, 'queue'))}
       {renderUpNext(_.get(props.context, 'upNext'))}
     </div>
   );

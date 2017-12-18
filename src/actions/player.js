@@ -5,9 +5,9 @@ import { getCookie } from '../util';
 export const PLAY_SONG = 'PLAY_SONG';
 export const PLAY_SONG_SUCCESS = 'PLAY_SONG_SUCCESS';
 export const PLAY_SONG_FAIL = 'PLAY_SONG_FAIL';
-export const TOGGLE_SHUFFLE_ON = 'TOGGLE_SHUFFLE_ON';
-export const TOGGLE_SHUFFLE_ON_SUCCESS = 'TOGGLE_SHUFFLE_ON_SUCCESS';
-export const TOGGLE_SHUFFLE_ON_FAIL = 'TOGGLE_SHUFFLE_ON_FAIL';
+export const QUEUE_SONG = 'QUEUE_SONG';
+export const QUEUE_SONG_SUCCESS = 'QUEUE_SONG_SUCCESS';
+export const QUEUE_SONG_FAIL = 'QUEUE_SONG_FAIL';
 
 const playSongUrl = (deviceId) => `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
 const toggleShuffleUrl = (deviceId) => `https://api.spotify.com/v1/me/player/shuffle?state=true&device_id=${deviceId}`;
@@ -31,23 +31,27 @@ const playSongFailAction = (error) => {
   };
 };
 
-const toggleShuffleOnAction = () => {
+const queueSongAction = () => {
   return {
-    type: TOGGLE_SHUFFLE_ON
+    type: QUEUE_SONG
   };
 };
 
-const toggleShuffleOnSuccessAction = () => {
+const queueSongSuccessAction = (song) => {
   return {
-    type: TOGGLE_SHUFFLE_ON_SUCCESS
+    type: QUEUE_SONG_SUCCESS,
+    song
   };
 };
 
-const toggleShuffleOnFailAction = (error) => {
+const queueSongFailAction = (error) => {
   return {
-    type: TOGGLE_SHUFFLE_ON_FAIL
+    type: QUEUE_SONG_FAIL,
+    error
   };
 };
+
+
 
 export const playSong = (deviceId, song) => (dispatch, getState) => {
   const accessToken = getCookie('accessToken');
@@ -94,8 +98,33 @@ export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
   });
 };
 
+export const queueSong = (song) => (dispatch, getState) => {
+  dispatch(queueSongAction());
+  dispatch(queueSongSuccessAction(song));
+};
+
 /* Shuffle stuff
 
+export const TOGGLE_SHUFFLE_ON = 'TOGGLE_SHUFFLE_ON';
+export const TOGGLE_SHUFFLE_ON_SUCCESS = 'TOGGLE_SHUFFLE_ON_SUCCESS';
+export const TOGGLE_SHUFFLE_ON_FAIL = 'TOGGLE_SHUFFLE_ON_FAIL';
+const toggleShuffleOnAction = () => {
+  return {
+    type: TOGGLE_SHUFFLE_ON
+  };
+};
+
+const toggleShuffleOnSuccessAction = () => {
+  return {
+    type: TOGGLE_SHUFFLE_ON_SUCCESS
+  };
+};
+
+const toggleShuffleOnFailAction = (error) => {
+  return {
+    type: TOGGLE_SHUFFLE_ON_FAIL
+  };
+};
 const toggleShuffleOptions = {
   url: toggleShuffleUrl(deviceId),
   headers: {

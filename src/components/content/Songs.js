@@ -71,7 +71,7 @@ class Songs extends React.Component {
                 </Header>
               </Table.Cell>
               <Table.Cell className="songs__song--actions">
-                <Button basic compact className="songs__action--queue">
+                <Button basic compact className="songs__action--queue" onClick={() => this.props.queueSong(song)}>
                   Queue
                 </Button>
               </Table.Cell>
