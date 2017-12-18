@@ -44,12 +44,16 @@ body {
 .spotify-content {
 }
 
-.spotify-content__wrapper {
+.spotify-content--wrapper {
   padding: 0 !important;
 }
 
 .spotify-content__column {
   padding: 1rem;
+}
+
+.spotify-content__column--wrapper {
+  width: inherit;
 }
 
 .spotify-content__column--sidebar {
@@ -59,7 +63,7 @@ body {
 /* SIDEBAR */
 .sidebar {
   position: fixed;
-  top: 3rem;
+  top: 4.2rem;
 }
 
 .sidebar__title {
@@ -84,6 +88,36 @@ body {
   color: #1e70bf
 }
 
+/* NOW PLAYING */
+.now-playing {
+  display: flex;
+  position: fixed;
+  bottom: 4.2rem;
+  width: inherit;
+  margin: 0 -1rem;
+  padding: 1rem 0;
+  border-top: 2px solid black;
+}
+
+.now-playing__next, .now-playing__previous {
+  font-size: 1.5rem;
+  flex-grow: 0;
+}
+.now-playing__next {
+  padding-right: 1rem;
+}
+
+.now-playing__previous {
+  padding-left: 1rem;
+}
+
+.now-playing__song-info {
+  flex-grow: 1;
+  text-align: center;
+}
+
 /* FOOTER */
 .footer {
+  position: fixed;
+  bottom: 0;
 }
