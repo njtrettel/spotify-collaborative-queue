@@ -99,6 +99,10 @@ body {
   border-top: 2px solid black;
 }
 
+.now-playing--disabled {
+  opacity: .3;
+}
+
 .now-playing__next, .now-playing__previous {
   font-size: 1.5rem;
   flex-grow: 0;
@@ -114,6 +118,11 @@ body {
 .now-playing__song-info {
   flex-grow: 1;
   text-align: center;
+}
+
+/* SONGS */
+.songs__song--clickable:hover {
+  cursor: pointer;
 }
 
 /* FOOTER */

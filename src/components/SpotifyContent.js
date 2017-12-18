@@ -17,7 +17,7 @@ const SpotifyContent = (props) => {
           </div>
         </Grid.Column>
         <Grid.Column width={13} className="spotify-content__column spotify-content__column--main">
-          <Content />
+          <Content {...props} />
         </Grid.Column>
       </Grid.Row>
     </Grid>

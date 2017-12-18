@@ -36,9 +36,6 @@ window.onSpotifyPlayerAPIReady = () => {
   player.on('account_error', e => console.error(e));
   player.on('playback_error', e => console.error(e));
 
-  // Playback status updates
-  player.on('player_state_changed', state => console.log(state));
-
   player.on('ready', data => {
     console.log('Ready with Device ID', data.device_id);
 
@@ -49,7 +46,7 @@ window.onSpotifyPlayerAPIReady = () => {
 
     render(
       <Provider store={store}>
-        <App player={player} playerData={data} />
+        <App player={player} deviceId={data.device_id} />
       </Provider>,
       document.getElementById('root')
     );

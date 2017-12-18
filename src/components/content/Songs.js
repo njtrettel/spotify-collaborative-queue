@@ -1,9 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import classnames from 'classnames';
 import _ from 'lodash';
 import { Table, Segment, Header } from 'semantic-ui-react';
+import { playSong } from '../../actions/player';
 
-const renderSongsTable = (songs) => (
+const actions = {
+  playSong
+};
+
+const renderSongsTable = (props) => (
   <Table basic='very' celled>
     <Table.Header>
       <Table.Row>
@@ -11,11 +17,11 @@ const renderSongsTable = (songs) => (
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {_.map(songs, (song, i) => (
-        <Table.Row key={i}>
+      {_.map(props.songs.data, (song, i) => (
+        <Table.Row key={i} className="songs__song">
           <Table.Cell>
             <Header as='h4'>
-              <Header.Content>
+              <Header.Content className="songs__song--title songs__song--clickable" onClick={() => props.playSong(props.deviceId, song)}>
                   {_.get(song, 'title')}
                 <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
               </Header.Content>
@@ -29,6 +35,7 @@ const renderSongsTable = (songs) => (
 
 const Songs = (props) => {
   const classes = classnames(props.className, 'songs');
+  const deviceId = _.get(props, 'deviceId');
   const songs = _.get(props, 'songs', { error: 'Empty songs' });
   if (songs.loading) {
     return <Segment loading />;
@@ -38,9 +45,9 @@ const Songs = (props) => {
   }
   return (
     <div className={classes}>
-      {renderSongsTable(songs.data)}
+      {renderSongsTable(props)}
     </div>
   );
 };
 
-export default Songs;
+export default connect(null, actions)(Songs);
