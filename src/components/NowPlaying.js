@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import classnames from 'classnames';
@@ -12,6 +13,7 @@ const stateToProps = (state, ownProps) => {
 };
 
 const NowPlaying = (props) => {
+  const player = _.get(props, 'player');
   const nowPlaying = _.get(props, 'nowPlaying', {});
   const title = nowPlaying.title;
   const artists = nowPlaying.artists;
@@ -22,14 +24,18 @@ const NowPlaying = (props) => {
 
   return (
     <div className={classes}>
-      <div className="now-playing__previous">&#8630;</div>
+      <div className="now-playing__previous" onClick={() => player.previousTrack()}>&#8630;</div>
       <div className="now-playing__song-info">
         <div className="now-playing__song-info--title">{title || '-----'}</div>
         <div className="now-playing__song-info--artists">{artists || '---'}</div>
       </div>
-      <div className="now-playing__next">&#8631;</div>
+      <div className="now-playing__next" onClick={() => player.nextTrack()}>&#8631;</div>
     </div>
   );
+};
+
+NowPlaying.propTypes = {
+  player: PropTypes.object.isRequired
 };
 
 export default connect(stateToProps)(NowPlaying);

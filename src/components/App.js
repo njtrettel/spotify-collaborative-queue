@@ -16,7 +16,7 @@ const actions = {
 
 const App = (props) => {
   const player = props.player;
-  player.on('player_state_changed', state => console.log(_.get(state, 'track_window.current_track', {})) || props.updateNowPlaying(_.get(state, 'track_window.current_track', {})));
+  player.on('player_state_changed', state => props.updateNowPlaying(_.get(state, 'track_window.current_track', {})));
   return (
     <Router history={history}>
       <div className="main-app">
