@@ -1,27 +1,12 @@
 import request from 'request';
 import _ from 'lodash';
+import { getCookie } from '../util';
 
 export const GET_SONGS = 'GET_SONGS';
 export const GET_SONGS_SUCCESS = 'GET_SONGS_SUCCESS';
 export const GET_SONGS_FAIL = 'GET_SONGS_FAIL';
 
 const myLibrarySongsUrl = (offset) => `https://api.spotify.com/v1/me/tracks?limit=50&offset=${offset}`;
-
-const getCookie = (cookieName) => {
-  const name = cookieName + "=";
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-};
 
 const getSongsAction = () => {
   return {
