@@ -4,27 +4,33 @@ import {
   PLAY_SONG_FAIL
 } from '../actions/player.js';
 
-const context = (state = { loading: false, error: null, upNext: {}, queue: {} }, action) => {
+const context = (state = { upNext: { loading: false, error: null, songs: [] }, queue: { loading: false, error: null, songs: [] } }, action) => {
   switch (action.type) {
     case PLAY_SONG:
       return {
-        loading: true,
-        error: null,
-        upNext: state.upNext,
+        upNext: {
+          loading: true,
+          error: null,
+          songs: state.upNext.songs
+        },
         queue: state.queue
       };
     case PLAY_SONG_SUCCESS:
       return {
-        loading: false,
-        error: null,
-        upNext: action.songs,
+        upNext: {
+          loading: false,
+          error: null,
+          songs: action.songs
+        },
         queue: state.queue
       }
     case PLAY_SONG_FAIL:
       return {
-        loading: false,
-        error: action.error,
-        upNext: state.upNext,
+        upNext: {
+          loading: false,
+          error: action.error,
+          songs: state.upNext.songs
+        },
         queue: state.queue
       }
     default:
