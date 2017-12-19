@@ -8,6 +8,10 @@ import Footer from './Footer';
 import SpotifyContent from './SpotifyContent';
 import { updateNowPlaying } from '../actions/nowPlaying';
 import { nextSong } from '../actions/player';
+//import io from 'socket.io-client';
+import Horizon from '@horizon/client';
+const horizon = new Horizon({host: 'localhost:8181'});
+const roomTable = horizon('rooms');
 
 const history = createBrowserHistory();
 
@@ -16,9 +20,26 @@ const actions = {
   nextSong
 };
 
+//const socket = io();
 const App = (props) => {
   const player = props.player;
   const deviceId = props.deviceId;
+  horizon.connect();
+  horizon.onReady().subscribe(() => {
+    console.log('horizon ready');
+  });
+  roomTable.watch().subscribe((items) => {
+    console.log('room updated', items);
+  });
+  /*socket.emit('createRoom', 'testRoom2', deviceId, (value) => {
+    console.log('socket ack', value);
+    socket.emit('queueSong', 'testRoom2', 'testSong', (value) => {
+      console.log('socket ack -- queue', value);
+    })
+  });
+  socket.on('pushQueueSong', (value) => {
+    console.log('got song', value);
+  });*/
   player.on('player_state_changed', state => {
     const currentTrack = _.get(state, 'track_window.current_track.uri', '');
     const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
