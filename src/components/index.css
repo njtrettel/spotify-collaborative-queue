@@ -149,6 +149,10 @@ body {
   min-height: 8.5rem;
 }
 
+.context__song--title {
+  margin-left: 2rem;
+}
+
 /* FOOTER */
 .footer {
   position: fixed;
