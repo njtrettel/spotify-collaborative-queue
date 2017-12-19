@@ -27,8 +27,8 @@ const NowPlaying = (props) => {
     <div className={classes}>
       <div className="now-playing__previous" onClick={() => !disabled && player.previousTrack()}>&#8630;</div>
       <Link to="/context" className="now-playing__song-info">
-        <div className="now-playing__song-info--title">{title || '-----'}</div>
-        <div className="now-playing__song-info--artists">{artists || '---'}</div>
+        <h4 className="now-playing__song-info--title">{title || '-----'}</h4>
+        <h6 className="now-playing__song-info--artists">{artists || '---'}</h6>
       </Link>
       <div className="now-playing__next" onClick={() => !disabled && player.nextTrack()}>&#8631;</div>
     </div>
