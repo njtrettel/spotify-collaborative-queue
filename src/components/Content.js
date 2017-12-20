@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 import Songs from './content/Songs'
 import Context from './content/Context';
@@ -22,4 +22,4 @@ const Content = (props) => {
   );
 };
 
-export default withRouter(Content);
+export default Content;
