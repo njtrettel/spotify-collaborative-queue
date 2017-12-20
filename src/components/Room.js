@@ -8,11 +8,12 @@ import Header from './Header';
 import Footer from './Footer';
 import SpotifyContent from './SpotifyContent';
 import { updateNowPlaying } from '../actions/nowPlaying';
-import { nextSong } from '../actions/player';
+import { nextSong, updateQueue } from '../actions/player';
 
 const actions = {
   updateNowPlaying,
-  nextSong
+  nextSong,
+  updateQueue
 };
 
 const horizon = new Horizon({host: 'localhost:8181'});
@@ -25,12 +26,12 @@ class Room extends React.Component {
     const roomTable = horizon(roomId);
     const player = props.player;
     const deviceId = props.deviceId;
-    roomTable.watch().subscribe((items) => {
-      this.updateQueue(items);
-    });
     horizon.connect();
     horizon.onReady().subscribe(() => {
       console.log('horizon ready');
+    });
+    roomTable.watch().subscribe((items) => {
+      this.updateQueue(items);
     });
     player.on('player_state_changed', state => {
       const currentTrack = _.get(state, 'track_window.current_track.uri', '');
@@ -45,6 +46,7 @@ class Room extends React.Component {
 
   updateQueue(items) {
     console.log('queue updated', items);
+    this.props.updateQueue(items);
   }
 
   render() {

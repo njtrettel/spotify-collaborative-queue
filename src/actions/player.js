@@ -8,6 +8,9 @@ export const PLAY_SONG_FAIL = 'PLAY_SONG_FAIL';
 export const QUEUE_SONG = 'QUEUE_SONG';
 export const QUEUE_SONG_SUCCESS = 'QUEUE_SONG_SUCCESS';
 export const QUEUE_SONG_FAIL = 'QUEUE_SONG_FAIL';
+export const UPDATE_QUEUE = 'UPDATE_QUEUE';
+export const UPDATE_QUEUE_SUCCESS = 'UPDATE_QUEUE_SUCCESS';
+export const UPDATE_QUEUE_FAIL = 'UPDATE_QUEUE_FAIL';
 export const NEXT_SONG = 'NEXT_SONG';
 export const NEXT_SONG_SUCCESS = 'NEXT_SONG_SUCCESS';
 export const NEXT_SONG_FAIL = 'NEXT_SONG_FAIL';
@@ -51,6 +54,26 @@ const queueSongSuccessAction = (song) => {
 const queueSongFailAction = (error) => {
   return {
     type: QUEUE_SONG_FAIL,
+    error
+  };
+};
+
+const updateQueueAction = () => {
+  return {
+    type: UPDATE_QUEUE
+  };
+};
+
+const updateQueueSuccessAction = (songs) => {
+  return {
+    type: UPDATE_QUEUE_SUCCESS,
+    songs
+  };
+};
+
+const updateQueueFailAction = (error) => {
+  return {
+    type: UPDATE_QUEUE_FAIL,
     error
   };
 };
@@ -125,6 +148,11 @@ export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
 export const queueSong = (song) => (dispatch, getState) => {
   dispatch(queueSongAction());
   return Promise.resolve(dispatch(queueSongSuccessAction(song)));
+};
+
+export const updateQueue = (songs) => (dispatch, getState) => {
+  dispatch(updateQueueAction());
+  return Promise.resolve(dispatch(updateQueueSuccessAction(songs)));
 };
 
 export const nextSong = (deviceId) => (dispatch, getState) => {

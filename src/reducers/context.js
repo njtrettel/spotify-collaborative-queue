@@ -6,6 +6,9 @@ import {
   QUEUE_SONG,
   QUEUE_SONG_SUCCESS,
   QUEUE_SONG_FAIL,
+  UPDATE_QUEUE,
+  UPDATE_QUEUE_SUCCESS,
+  UPDATE_QUEUE_FAIL,
   NEXT_SONG,
   NEXT_SONG_SUCCESS,
   NEXT_SONG_FAIL
@@ -59,6 +62,38 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
         }
       };
     case QUEUE_SONG_FAIL:
+      return {
+        upNext: state.upNext,
+        queue: {
+          loading: false,
+          error: action.error,
+          songs: state.queue.songs
+        }
+      };
+    case UPDATE_QUEUE:
+      return {
+        upNext: state.upNext,
+        queue: {
+          loading: true,
+          error: null,
+          songs: state.queue.songs
+        }
+      };
+    case UPDATE_QUEUE_SUCCESS:
+      const roomQueue = action.songs;
+      const localQueue = state.queue.songs;
+      const localQueueTimestamps = _.map(localQueue, 'timestamp');
+      const newSongsInQueue = _.reject(action.songs, (song) => _.includes(localQueueTimestamps, song.timestamp));
+      const newQueue = _.sortBy(_.concat(localQueue, newSongsInQueue), 'timestamp');
+      return {
+        upNext: state.upNext,
+        queue: {
+          loading: false,
+          error: null,
+          songs: newQueue
+        }
+      };
+    case UPDATE_QUEUE_FAIL:
       return {
         upNext: state.upNext,
         queue: {
