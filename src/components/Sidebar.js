@@ -15,7 +15,7 @@ const panels = [{
 }]
 
 const Sidebar = (props) => {
-  const path = (name) => `/room/${props.match.params.roomId}/${name}`;
+  const path = (name) => `/room/${props.roomId}/${name}`;
   return (
     <div className="sidebar">
       <div className="sidebar__title"> My Library </div>
@@ -29,4 +29,4 @@ const Sidebar = (props) => {
   );
 };
 
-export default withRouter(Sidebar);
+export default Sidebar;

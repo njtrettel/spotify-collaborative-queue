@@ -22,7 +22,8 @@ const NowPlaying = (props) => {
   const classes = classnames('now-playing', {
     'now-playing--disabled': disabled
   });
-  const pathToContext = `/room/nick/context`;
+  const roomId = _.get(props, 'roomId', '');
+  const pathToContext = `/room/${roomId}/context`;
 
   return (
     <div className={classes}>

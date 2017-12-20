@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import Horizon from '@horizon/client';
-import Player from './Player';
 import Header from './Header';
 import Footer from './Footer';
 import SpotifyContent from './SpotifyContent';
@@ -25,6 +24,7 @@ class Room extends React.Component {
     const roomId = props.roomId;
     const roomTable = horizon(roomId);
     const player = props.player;
+    const deviceId = props.deviceId;
     roomTable.watch().subscribe((items) => {
       this.updateQueue(items);
     });
@@ -53,7 +53,7 @@ class Room extends React.Component {
     return (
       <div className="main-app">
         <Header className="main-app__bar main-app__bar--header" />
-        <SpotifyContent className="main-app__content" {..._.pick(this.props, playerProps)} />
+        <SpotifyContent className="main-app__content" {..._.pick(this.props, playerProps)} roomId={this.props.roomId} />
         <Footer className="main-app__bar main-app__bar--footer" />
       </div>
     );

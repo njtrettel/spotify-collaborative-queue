@@ -12,7 +12,7 @@ const SpotifyContent = (props) => {
       <Grid.Row className="spotify-content--wrapper">
         <Grid.Column width={3} className="spotify-content__column spotify-content__column--sidebar">
           <div className="spotify-content__column--wrapper">
-            <Sidebar />
+            <Sidebar {...props} />
             <NowPlaying {...props} />
           </div>
         </Grid.Column>
