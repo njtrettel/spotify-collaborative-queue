@@ -82,9 +82,9 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
     case UPDATE_QUEUE_SUCCESS:
       const roomQueue = action.songs;
       const localQueue = state.queue.songs;
-      const localQueueTimestamps = _.map(localQueue, 'timestamp');
-      const newSongsInQueue = _.reject(action.songs, (song) => _.includes(localQueueTimestamps, song.timestamp));
-      const newQueue = _.sortBy(_.concat(localQueue, newSongsInQueue), 'timestamp');
+      const localQueueTimestamps = _.map(localQueue, 'id');
+      const newSongsInQueue = _.reject(action.songs, (song) => _.includes(localQueueTimestamps, song.id));
+      const newQueue = _.sortBy(_.concat(localQueue, newSongsInQueue), 'id');
       return {
         upNext: state.upNext,
         queue: {

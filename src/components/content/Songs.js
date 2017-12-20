@@ -20,6 +20,13 @@ const stateToProps = (state, ownProps) => {
   };
 };
 
+const stampSong = (song, source) => {
+  return _.merge({}, song, {
+    id: +(new Date()),
+    source
+  });
+};
+
 const filterSongs = (songs, filter) => {
   if (!filter) {
     return songs;
@@ -93,7 +100,7 @@ class Songs extends React.Component {
                 </Header>
               </Table.Cell>
               <Table.Cell className="songs__song--actions">
-                <Button basic compact className="songs__action--queue" onClick={() => this.props.queueSong(song)}>
+                <Button basic compact className="songs__action--queue" onClick={() => this.props.queueSong(stampSong(song, 'local'))}>
                   Queue
                 </Button>
               </Table.Cell>
