@@ -1,52 +1,26 @@
 import React from 'react';
 import { Router } from 'react-router';
 import createBrowserHistory from 'history/createBrowserHistory'
-import { connect } from 'react-redux';
-import _ from 'lodash';
-import Header from './Header';
-import Footer from './Footer';
-import SpotifyContent from './SpotifyContent';
-import { updateNowPlaying } from '../actions/nowPlaying';
-import { nextSong } from '../actions/player';
-import Horizon from '@horizon/client';
-const horizon = new Horizon({host: 'localhost:8181'});
-const roomTable = horizon('rooms');
+import { Switch, Route } from 'react-router-dom';
+import JoinRoom from './JoinRoom';
+import Room from './Room';
 
 const history = createBrowserHistory();
 
-const actions = {
-  updateNowPlaying,
-  nextSong
-};
-
 const App = (props) => {
-  const player = props.player;
-  const deviceId = props.deviceId;
-  horizon.connect();
-  horizon.onReady().subscribe(() => {
-    console.log('horizon ready');
-  });
-  roomTable.watch().subscribe((items) => {
-    console.log('room updated', items);
-  });
-  player.on('player_state_changed', state => {
-    const currentTrack = _.get(state, 'track_window.current_track.uri', '');
-    const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
-    const duration = _.get(state, 'duration', 1);
-    if ((currentTrack === previousTrack) && (duration === 0)) {
-      return props.nextSong(deviceId);
-    }
-    props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
-  });
+  console.log('rendering app');
   return (
     <Router history={history}>
-      <div className="main-app">
-        <Header className="main-app__bar main-app__bar--header" />
-        <SpotifyContent className="main-app__content" player={player} deviceId={deviceId} />
-        <Footer className="main-app__bar main-app__bar--footer" />
-      </div>
+      <Switch>
+        <Route exact path="/" component={JoinRoom} />
+        <Route path="/room/:roomId" component={({ match }) => {
+          const roomId = match.params.roomId;
+          return <Room deviceId={props.deviceId} player={props.player} roomId={roomId} />;
+        }} />
+        <Route path="*" component={() => "Route not found"} />
+      </Switch>
     </Router>
   );
 };
 
-export default connect(null, actions)(App);
+export default App;

@@ -53,4 +53,4 @@ window.onSpotifyPlayerAPIReady = () => {
   });
 
   player.connect();
-}
+};

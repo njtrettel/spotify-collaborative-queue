@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import classnames from 'classnames';
 import { Segment } from 'semantic-ui-react';
@@ -22,11 +22,12 @@ const NowPlaying = (props) => {
   const classes = classnames('now-playing', {
     'now-playing--disabled': disabled
   });
+  const pathToContext = `/room/nick/context`;
 
   return (
     <div className={classes}>
       <div className="now-playing__previous" onClick={() => !disabled && player.previousTrack()}>&#8630;</div>
-      <Link to="/context" className="now-playing__song-info">
+      <Link to={pathToContext} className="now-playing__song-info">
         <h4 className="now-playing__song-info--title">{title || '-----'}</h4>
         <h6 className="now-playing__song-info--artists">{artists || '---'}</h6>
       </Link>
@@ -39,4 +40,4 @@ NowPlaying.propTypes = {
   player: PropTypes.object.isRequired
 };
 
-export default connect(stateToProps)(NowPlaying);
+export default connect(stateToProps)(withRouter(NowPlaying));
