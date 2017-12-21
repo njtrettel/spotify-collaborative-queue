@@ -42,6 +42,10 @@ class Room extends React.Component {
       }
       props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
     });
+    this.addToRoomQueue = this.addToRoomQueue.bind(this);
+    this.state = {
+      roomTable
+    };
   }
 
   updateQueue(items) {
@@ -49,13 +53,18 @@ class Room extends React.Component {
     this.props.updateQueue(items);
   }
 
+  addToRoomQueue(song) {
+    this.state.roomTable.insert(song);
+  }
+
   render() {
     console.log('rendering room');
-    const playerProps = ['player', 'deviceId'];
+    const childPropNames = ['player', 'deviceId', 'roomId'];
+    const childProps = _.merge({}, _.pick(this.props, childPropNames), { addToRoomQueue: this.addToRoomQueue });
     return (
       <div className="main-app">
         <Header className="main-app__bar main-app__bar--header" />
-        <SpotifyContent className="main-app__content" {..._.pick(this.props, playerProps)} roomId={this.props.roomId} />
+        <SpotifyContent className="main-app__content" {...childProps} />
         <Footer className="main-app__bar main-app__bar--footer" />
       </div>
     );

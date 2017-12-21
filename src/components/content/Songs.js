@@ -103,6 +103,9 @@ class Songs extends React.Component {
                 <Button basic compact className="songs__action--queue" onClick={() => this.props.queueSong(stampSong(song, 'local'))}>
                   Queue
                 </Button>
+                <Button secondary compact className="songs__action--queue-all" onClick={() => this.props.addToRoomQueue(stampSong(song, this.props.deviceId))}>
+                  Queue All
+                </Button>
               </Table.Cell>
             </Table.Row>
           ))}

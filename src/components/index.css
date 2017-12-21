@@ -156,6 +156,13 @@ body {
   cursor: pointer;
 }
 
+.songs__action--queue-all {
+  color: #1db954 !important;
+}
+.songs__action--queue-all:hover {
+  color: white !important;
+}
+
 /* CONTEXT */
 .context__loading {
   min-height: 8.5rem;
