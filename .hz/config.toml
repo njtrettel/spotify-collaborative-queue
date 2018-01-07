@@ -14,9 +14,9 @@ port = 8181
 # 'secure' will disable HTTPS and use HTTP instead when set to 'false'
 # 'key_file' and 'cert_file' are required for serving HTTPS
 #------------------------------------------------------------------------------
-# secure = true
-# key_file = "horizon-key.pem"
-# cert_file = "horizon-cert.pem"
+secure = true
+key_file = "ssl/private.key"
+cert_file = "ssl/certificate.crt"
 
 
 ###############################################################################
