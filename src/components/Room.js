@@ -16,7 +16,7 @@ const actions = {
   updateQueue
 };
 
-const horizon = new Horizon({host: 'localhost:8181'});
+const horizon = new Horizon({host: 'localhost:8181', secure: true});
 
 class Room extends React.Component {
   constructor(props) {

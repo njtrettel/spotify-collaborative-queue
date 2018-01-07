@@ -1,10 +1,20 @@
-const http = require('http');
+const https = require('https');
 const express = require('express');
 const app = express();
-const server = http.createServer(app);
 const querystring = require('querystring');
 const request = require('request');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
+
+const key = fs.readFileSync('ssl/private.key');
+const cert = fs.readFileSync('ssl/certificate.crt');
+
+const options = {
+  key: key,
+  cert: cert
+};
+
+const server = https.createServer(options, app);
 
 const { clientId, clientSecret } = require('./secrets');
 
@@ -19,7 +29,7 @@ const generateRandomString = function(length) {
 };
 
 const stateKey = 'spotify_auth_state';
-const redirectUri = 'http://localhost:1234/callback';
+const redirectUri = 'https://localhost:1234/callback';
 const scope =  'user-read-private \
 user-read-email \
 user-read-birthdate \
