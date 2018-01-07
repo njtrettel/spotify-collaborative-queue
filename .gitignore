@@ -5,3 +5,4 @@ dist
 secrets.js
 *-lock.json
 *.pem
+ssl/
