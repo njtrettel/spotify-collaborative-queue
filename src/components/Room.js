@@ -9,6 +9,7 @@ import Footer from './Footer';
 import SpotifyContent from './SpotifyContent';
 import { updateNowPlaying } from '../actions/nowPlaying';
 import { nextSong, updateQueue } from '../actions/player';
+import config from '../../config';
 
 const actions = {
   updateNowPlaying,
@@ -16,7 +17,8 @@ const actions = {
   updateQueue
 };
 
-const horizon = new Horizon({host: 'localhost:8181', secure: true});
+const host = config.getHorizonHost();
+const horizon = new Horizon({host, secure: true});
 
 class Room extends React.Component {
   constructor(props) {

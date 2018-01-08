@@ -5,6 +5,7 @@ const querystring = require('querystring');
 const request = require('request');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
+const config = require('./config');
 
 const key = fs.readFileSync('ssl/private.key');
 const cert = fs.readFileSync('ssl/certificate.crt');
@@ -29,7 +30,7 @@ const generateRandomString = function(length) {
 };
 
 const stateKey = 'spotify_auth_state';
-const redirectUri = 'https://localhost:1234/callback';
+const authRedirectUri = config.getAuthRedirectUri();
 const scope =  'user-read-private \
 user-read-email \
 user-read-birthdate \
@@ -60,7 +61,7 @@ app.get('/login', (req, res) => {
       response_type: 'code',
       client_id: clientId,
       scope: scope,
-      redirect_uri: redirectUri,
+      redirect_uri: authRedirectUri,
       state: state
     }));
 });
@@ -78,7 +79,7 @@ app.get('/callback', (req, res) => {
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
-        redirect_uri: redirectUri,
+        redirect_uri: authRedirectUri,
         grant_type: 'authorization_code'
       },
       headers: {
@@ -112,5 +113,5 @@ app.get('*', (req, res) => {
 });
 
 
-server.listen(1234);
+server.listen(443);
 console.log('server running');
