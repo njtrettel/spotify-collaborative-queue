@@ -5,8 +5,8 @@
 # 'bind' controls which local interfaces will be listened on
 # 'port' controls which port will be listened on
 #------------------------------------------------------------------------------
-bind = [ "localhost" ]
-port = 8181
+# bind = [ "localhost" ]
+port = 80
 
 
 ###############################################################################
