@@ -6,6 +6,8 @@
   "scripts": {
     "build": "parcel build index.html --out-dir public/dist --public-url /dist",
     "watch": "parcel watch index.html --out-dir public/dist --public-url /dist",
+    "start-local": "APP_ENVIRONMENT=local HZ_BIND=localhost npm run start",
+    "start-dev": "APP_ENVIRONMENT=dev HZ_BIND=ec2-54-200-6-228.us-west-2.compute.amazonaws.com npm run start",
     "start": "npm run start-server && npm run build && npm run start-horizon",
     "start-server": "node server.js &",
     "start-horizon": "hz serve --dev --secure"
