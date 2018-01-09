@@ -121,10 +121,7 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
   return withAuth(requestPlaySong, refreshToken).then(() => {
     // TODO handle song not available
     return dispatch(playSongSuccessAction());
-  }).catch(error => {
-    console.log('error playing song', error);
-    return dispatch(playSongFailAction(error));
-  });
+  }).catch(error => dispatch(playSongFailAction(error)));
 };
 
 // this dispatches the same PLAY_SONG actions as the singular song version above
@@ -150,10 +147,7 @@ export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
   dispatch(playSongAction());
   return withAuth(requestPlayMultipleSongs, refreshToken).then(() => {
     return dispatch(playSongSuccessAction(_.slice(shuffledSongs, 1)));
-  }).catch(error => {
-    console.log('error playing multiple songs', error);
-    return dispatch(playSongFailAction(error));
-  });
+  }).catch(error => dispatch(playSongFailAction(error)));
 };
 
 export const queueSong = (song) => (dispatch, getState) => {
@@ -196,7 +190,7 @@ export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
 
     return withAuth(requestNextSong, refreshToken)
       .then(() => dispatch(nextSongSuccessAction(playingFromQueue, nextSongToPlay)))
-      .catch((error) => console.log('error next song', error) || dispatch(nextSongFailAction(error)));
+      .catch((error) => dispatch(nextSongFailAction(error)));
   }
   return Promise.resolve(dispatch(nextSongSuccessAction()));
 };

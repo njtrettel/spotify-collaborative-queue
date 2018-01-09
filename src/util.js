@@ -29,17 +29,15 @@ export const refreshAccessToken = (refreshToken) => {
     json: true
   };
 
-  return rp.post(authOptions).then(referrer => {
-    console.log(referrer);
-    return referrer;
-  });
+  return rp.post(authOptions);
 };
 
 export const withAuth = (execute, refreshToken) => {
-  return execute().catch(error => {
-    console.log('!!! withAuth error', error);
-    return refreshAccessToken(refreshToken).then(() => execute().catch(error => Promise.reject(error)));
-  });
+  return execute().catch(error =>
+    refreshAccessToken(refreshToken).then(() =>
+      execute().catch(error => Promise.reject(error))
+    ).catch((error) => console.error('error refreshing token', error))
+  );
 };
 
 export const reduceSpotifyTrack = (song) => {

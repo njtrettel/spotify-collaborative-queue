@@ -36,8 +36,6 @@ window.onSpotifyPlayerAPIReady = () => {
     console.error('init error', e);
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      accessToken = getCookie('accessToken');
-      console.log('!!! refreshed token', accessToken, referrer);
       window.location = referrer;
     });
   });
@@ -45,8 +43,6 @@ window.onSpotifyPlayerAPIReady = () => {
     console.error('auth error', e);
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      accessToken = getCookie('accessToken');
-      console.log('!!! refreshed token', accessToken, referrer);
       window.location = referrer;
     });
   });
@@ -54,8 +50,6 @@ window.onSpotifyPlayerAPIReady = () => {
     console.error('account error', e);
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      accessToken = getCookie('accessToken');
-      console.log('!!! refreshed token', accessToken, referrer);
       window.location = referrer;
     });
   });
@@ -63,8 +57,6 @@ window.onSpotifyPlayerAPIReady = () => {
     console.error('playback error', e);
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      accessToken = getCookie('accessToken');
-      console.log('!!! refreshed token', accessToken, referrer);
       window.location = referrer;
     });
   });
