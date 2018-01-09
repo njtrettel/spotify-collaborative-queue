@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import collaborativeQueueApp from './reducers';
 import App from './components/App';
+import { refreshAccessToken } from './util';
 import 'semantic-ui-css/semantic.min.css';
 
 const getCookie = (cookieName) => {
@@ -24,17 +25,49 @@ const getCookie = (cookieName) => {
 };
 
 window.onSpotifyPlayerAPIReady = () => {
-  const accessToken = getCookie('accessToken');
+  let accessToken = getCookie('accessToken');
   const player = new Spotify.Player({
     name: 'Collaborative Play Queue',
     getOAuthToken: cb => { cb(accessToken); }
   });
 
   // Error handling
-  player.on('initialization_error', e => console.error(e));
-  player.on('authentication_error', e => console.error(e));
-  player.on('account_error', e => console.error(e));
-  player.on('playback_error', e => console.error(e));
+  player.on('initialization_error', e => {
+    console.error('init error', e);
+    const refreshToken = getCookie('refreshToken');
+    refreshAccessToken(refreshToken).then((referrer) => {
+      accessToken = getCookie('accessToken');
+      console.log('!!! refreshed token', accessToken, referrer);
+      window.location = referrer;
+    });
+  });
+  player.on('authentication_error', e => {
+    console.error('auth error', e);
+    const refreshToken = getCookie('refreshToken');
+    refreshAccessToken(refreshToken).then((referrer) => {
+      accessToken = getCookie('accessToken');
+      console.log('!!! refreshed token', accessToken, referrer);
+      window.location = referrer;
+    });
+  });
+  player.on('account_error', e => {
+    console.error('account error', e);
+    const refreshToken = getCookie('refreshToken');
+    refreshAccessToken(refreshToken).then((referrer) => {
+      accessToken = getCookie('accessToken');
+      console.log('!!! refreshed token', accessToken, referrer);
+      window.location = referrer;
+    });
+  });
+  player.on('playback_error', e => {
+    console.error('playback error', e);
+    const refreshToken = getCookie('refreshToken');
+    refreshAccessToken(refreshToken).then((referrer) => {
+      accessToken = getCookie('accessToken');
+      console.log('!!! refreshed token', accessToken, referrer);
+      window.location = referrer;
+    });
+  });
 
   player.on('ready', data => {
     console.log('Ready with Device ID', data.device_id);
