@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { clientId, clientSecret } from '../secrets';
+import rp from 'request-promise';
 
 export const getCookie = (cookieName) => {
   const name = cookieName + "=";
@@ -14,6 +16,30 @@ export const getCookie = (cookieName) => {
     }
   }
   return "";
+};
+
+export const refreshAccessToken = (refreshToken) => {
+  const location = window.location;
+  const url = location.protocol + '//' + location.host + '/refresh';
+  const authOptions = {
+    url,
+    form: {
+      refreshToken
+    },
+    json: true
+  };
+
+  return rp.post(authOptions).then(referrer => {
+    console.log(referrer);
+    return referrer;
+  });
+};
+
+export const withAuth = (execute, refreshToken) => {
+  return execute().catch(error => {
+    console.log('!!! withAuth error', error);
+    return refreshAccessToken(refreshToken).then(() => execute().catch(error => Promise.reject(error)));
+  });
 };
 
 export const reduceSpotifyTrack = (song) => {

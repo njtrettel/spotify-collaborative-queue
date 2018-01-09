@@ -1,6 +1,6 @@
 import rp from 'request-promise';
 import _ from 'lodash';
-import { getCookie } from '../util';
+import { getCookie, withAuth } from '../util';
 
 export const PLAY_SONG = 'PLAY_SONG';
 export const PLAY_SONG_SUCCESS = 'PLAY_SONG_SUCCESS';
@@ -101,46 +101,57 @@ const nextSongFailAction = (error) => {
 };
 
 export const playSong = (deviceId, song) => (dispatch, getState) => {
-  const accessToken = getCookie('accessToken');
-  const playOptions = {
-    url: playSongUrl(deviceId),
-    headers: {
-      'Authorization': 'Bearer ' + accessToken
-    },
-    body: {
-      'uris': [song.uri]
-    },
-    json: true
+  const refreshToken = getCookie('refreshToken');
+  const requestPlaySong = () => {
+    const accessToken = getCookie('accessToken');
+    const playOptions = {
+      url: playSongUrl(deviceId),
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      },
+      body: {
+        'uris': [song.uri]
+      },
+      json: true
+    };
+    return rp.put(playOptions);
   };
 
   dispatch(playSongAction());
-  return rp.put(playOptions).then(() => {
+  return withAuth(requestPlaySong, refreshToken).then(() => {
+    // TODO handle song not available
     return dispatch(playSongSuccessAction());
   }).catch(error => {
+    console.log('error playing song', error);
     return dispatch(playSongFailAction(error));
   });
 };
 
 // this dispatches the same PLAY_SONG actions as the singular song version above
 export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
-  const accessToken = getCookie('accessToken');
+  const refreshToken = getCookie('refreshToken');
   const shuffledSongs = _.shuffle(songs);
   const uriToPlay = _.get(shuffledSongs[0], 'uri', '');
-  const playOptions = {
-    url: playSongUrl(deviceId),
-    headers: {
-      'Authorization': 'Bearer ' + accessToken
-    },
-    body: {
-      'uris': [uriToPlay]
-    },
-    json: true
+  const requestPlayMultipleSongs = () => {
+    const accessToken = getCookie('accessToken');
+    const playOptions = {
+      url: playSongUrl(deviceId),
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      },
+      body: {
+        'uris': [uriToPlay]
+      },
+      json: true
+    };
+    return rp.put(playOptions);
   };
 
   dispatch(playSongAction());
-  return rp.put(playOptions).then(() => {
+  return withAuth(requestPlayMultipleSongs, refreshToken).then(() => {
     return dispatch(playSongSuccessAction(_.slice(shuffledSongs, 1)));
   }).catch(error => {
+    console.log('error playing multiple songs', error);
     return dispatch(playSongFailAction(error));
   });
 };
@@ -156,7 +167,6 @@ export const updateQueue = (songs) => (dispatch, getState) => {
 };
 
 export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
-  const accessToken = getCookie('accessToken');
   const context = getState().context;
   const queue = _.get(context.queue, 'songs', []);
   const upNext = _.get(context.upNext, 'songs', []);
@@ -168,20 +178,25 @@ export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
 
   dispatch(nextSongAction(playingFromQueue));
   if (nextSongToPlay) {
-    const playOptions = {
-      url: playSongUrl(deviceId),
-      headers: {
-        'Authorization': 'Bearer ' + accessToken
-      },
-      body: {
-        'uris': [nextSongToPlay.uri]
-      },
-      json: true
+    const refreshToken = getCookie('refreshToken');
+    const requestNextSong = () => {
+      const accessToken = getCookie('accessToken');
+      const playOptions = {
+        url: playSongUrl(deviceId),
+        headers: {
+          'Authorization': 'Bearer ' + accessToken
+        },
+        body: {
+          'uris': [nextSongToPlay.uri]
+        },
+        json: true
+      };
+      return rp.put(playOptions);
     };
 
-    return rp.put(playOptions)
+    return withAuth(requestNextSong, refreshToken)
       .then(() => dispatch(nextSongSuccessAction(playingFromQueue, nextSongToPlay)))
-      .catch((error) => dispatch(nextSongFailAction(error)));
+      .catch((error) => console.log('error next song', error) || dispatch(nextSongFailAction(error)));
   }
   return Promise.resolve(dispatch(nextSongSuccessAction()));
 };
