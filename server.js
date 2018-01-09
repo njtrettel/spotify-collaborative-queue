@@ -6,6 +6,7 @@ const request = require('request');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const config = require('./config');
+const bodyParser = require('body-parser');
 
 const key = fs.readFileSync('ssl/private.key');
 const cert = fs.readFileSync('ssl/certificate.crt');
@@ -51,6 +52,10 @@ streaming';
 
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 app.get('/login', (req, res) => {
   const state = generateRandomString(16);
@@ -101,6 +106,33 @@ app.get('/callback', (req, res) => {
       }
     });
   }
+});
+
+app.post('/refresh', (req, res) => {
+  const refreshToken = req.body.refreshToken;
+  const authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    form: {
+      refresh_token: refreshToken,
+      grant_type: 'refresh_token'
+    },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(clientId + ':' + clientSecret).toString('base64'))
+    },
+    json: true
+  };
+
+  const referrer = req.get('Referrer');
+  request.post(authOptions, function(error, response, body) {
+    if (!error) {
+      const accessToken = body.access_token;
+      res.cookie('accessToken', accessToken);
+      res.status(200).send(referrer);
+    } else {
+      console.log(error);
+      res.status(400).send('error');
+    }
+  });
 });
 
 app.get('*', (req, res) => {
