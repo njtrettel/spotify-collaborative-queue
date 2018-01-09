@@ -8,7 +8,7 @@ const Content = (props) => {
   console.log('rendering content');
   const deviceId = _.get(props, 'deviceId');
   return (
-    <div className="spotify-content__main">
+    <div className="room-content__main">
       <Switch>
         <Route exact path="/room/:roomId" component={({ location }) => {
           const path = location.pathname + '/songs';

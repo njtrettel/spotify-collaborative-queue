@@ -4,6 +4,8 @@ import createBrowserHistory from 'history/createBrowserHistory'
 import { Switch, Route } from 'react-router-dom';
 import JoinRoom from './JoinRoom';
 import Room from './Room';
+import Header from './Header';
+import Footer from './Footer';
 
 const history = createBrowserHistory();
 
@@ -15,7 +17,13 @@ const App = (props) => {
         <Route exact path="/" component={JoinRoom} />
         <Route path="/room/:roomId" component={({ match }) => {
           const roomId = match.params.roomId;
-          return <Room deviceId={props.deviceId} player={props.player} roomId={roomId} />;
+          return (
+            <div className="main-app">
+              <Header className="main-app__bar main-app__bar--header" />
+              <Room className="main-app__content" deviceId={props.deviceId} player={props.player} roomId={roomId} />
+              <Footer className="main-app__bar main-app__bar--footer" />
+            </div>
+          );
         }} />
         <Route path="*" component={() => "Route not found"} />
       </Switch>

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import classnames from 'classnames';
 import Horizon from '@horizon/client';
-import Header from './Header';
-import Footer from './Footer';
-import SpotifyContent from './SpotifyContent';
+import { Grid } from 'semantic-ui-react';
+import Sidebar from './Sidebar';
+import Content from './Content';
+import NowPlaying from './NowPlaying';
 import { updateNowPlaying } from '../actions/nowPlaying';
 import { nextSong, updateQueue } from '../actions/player';
 import config from '../../config';
@@ -61,14 +63,23 @@ class Room extends React.Component {
 
   render() {
     console.log('rendering room');
+    const classes = classnames(_.get(this.props, 'className', ''), 'room-content');
     const childPropNames = ['player', 'deviceId', 'roomId'];
     const childProps = _.merge({}, _.pick(this.props, childPropNames), { addToRoomQueue: this.addToRoomQueue });
     return (
-      <div className="main-app">
-        <Header className="main-app__bar main-app__bar--header" />
-        <SpotifyContent className="main-app__content" {...childProps} />
-        <Footer className="main-app__bar main-app__bar--footer" />
-      </div>
+      <Grid columns={16} className={classes}>
+        <Grid.Row className="room-content--wrapper">
+          <Grid.Column width={3} className="room-content__column room-content__column--sidebar">
+            <div className="room-content__column--wrapper">
+              <Sidebar {...childProps} />
+              <NowPlaying {...childProps} />
+            </div>
+          </Grid.Column>
+          <Grid.Column width={13} className="room-content__column room-content__column--main">
+            <Content {...childProps} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 };

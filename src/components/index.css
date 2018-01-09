@@ -40,23 +40,23 @@ body {
 .header {
 }
 
-/* SPOTIFY CONTENT */
-.spotify-content {
+/* ROOM CONTENT */
+.room-content {
 }
 
-.spotify-content--wrapper {
+.room-content--wrapper {
   padding: 0 !important;
 }
 
-.spotify-content__column {
+.room-content__column {
   padding: 1rem;
 }
 
-.spotify-content__column--wrapper {
+.room-content__column--wrapper {
   width: inherit;
 }
 
-.spotify-content__column--sidebar {
+.room-content__column--sidebar {
   background-color: #999;
 }
 
