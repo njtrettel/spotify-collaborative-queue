@@ -155,13 +155,16 @@ export const updateQueue = (songs) => (dispatch, getState) => {
   return Promise.resolve(dispatch(updateQueueSuccessAction(songs)));
 };
 
-export const nextSong = (deviceId) => (dispatch, getState) => {
+export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
   const accessToken = getCookie('accessToken');
   const context = getState().context;
   const queue = _.get(context.queue, 'songs', []);
   const upNext = _.get(context.upNext, 'songs', []);
   const playingFromQueue = !_.isEmpty(queue);
   const nextSongToPlay = playingFromQueue ? queue[0] : upNext[0];
+  if (playingFromQueue && _.get(queue[0], 'source', '') === deviceId) {
+    deleteSong(_.get(queue[0], 'id'));
+  }
 
   dispatch(nextSongAction(playingFromQueue));
   if (nextSongToPlay) {

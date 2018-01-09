@@ -40,7 +40,7 @@ class Room extends React.Component {
       const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
       const duration = _.get(state, 'duration', 1);
       if ((currentTrack === previousTrack) && (duration === 0)) {
-        return props.nextSong(deviceId);
+        return props.nextSong((id) => roomTable.remove(id), deviceId);
       }
       props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
     });
