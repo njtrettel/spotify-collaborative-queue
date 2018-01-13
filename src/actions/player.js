@@ -161,6 +161,7 @@ export const updateQueue = (songs) => (dispatch, getState) => {
 };
 
 export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
+  console.log('next song');
   const context = getState().context;
   const queue = _.get(context.queue, 'songs', []);
   const upNext = _.get(context.upNext, 'songs', []);
@@ -175,6 +176,7 @@ export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
     const refreshToken = getCookie('refreshToken');
     const requestNextSong = () => {
       const accessToken = getCookie('accessToken');
+      console.log('requesting play song with token', accessToken);
       const playOptions = {
         url: playSongUrl(deviceId),
         headers: {
@@ -185,13 +187,14 @@ export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
         },
         json: true
       };
-      return rp.put(playOptions);
+      return rp.put(playOptions).then(() => console.log('next song success'));
     };
 
     return withAuth(requestNextSong, refreshToken)
       .then(() => dispatch(nextSongSuccessAction(playingFromQueue, nextSongToPlay)))
-      .catch((error) => dispatch(nextSongFailAction(error)));
+      .catch((error) => console.log('next song fail') || dispatch(nextSongFailAction(error)));
   }
+  console.log('no next song');
   return Promise.resolve(dispatch(nextSongSuccessAction()));
 };
 

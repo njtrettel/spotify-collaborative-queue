@@ -38,6 +38,7 @@ class Room extends React.Component {
       this.updateQueue(items);
     });
     player.on('player_state_changed', state => {
+      console.log('player state changed', state);
       const currentTrack = _.get(state, 'track_window.current_track.uri', '');
       const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
       const duration = _.get(state, 'duration', 1);

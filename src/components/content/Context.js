@@ -48,6 +48,7 @@ const renderNowPlaying = (props) => {
 };
 
 const Context = (props) => {
+  console.log('Context props', props.context);
   const classes = classnames(props.className, 'context');
   const nowPlaying = _.get(props, 'nowPlaying', {});
   const queue = _.get(props.context, 'queue');

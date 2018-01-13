@@ -29,14 +29,17 @@ export const refreshAccessToken = (refreshToken) => {
     json: true
   };
 
-  return rp.post(authOptions);
+  return rp.post(authOptions).then((referrer) => {
+    console.log('refreshed access token requested by: ', referrer);
+    return referrer;
+  });
 };
 
 export const withAuth = (execute, refreshToken) => {
   return execute().catch(error =>
-    refreshAccessToken(refreshToken).then(() =>
-      execute().catch(error => Promise.reject(error))
-    ).catch((error) => console.error('error refreshing token', error))
+    console.log('error with spotify auth, refreshing access token') || refreshAccessToken(refreshToken).then(() =>
+      execute().catch(error => console.log('still error with spotify auth') || Promise.reject(error))
+    ).catch((error) => console.error('refreshing access token didn\'t work', error) || Promise.reject(error))
   );
 };
 

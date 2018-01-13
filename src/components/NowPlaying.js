@@ -18,7 +18,7 @@ const NowPlaying = (props) => {
   const nowPlaying = _.get(props, 'nowPlaying', {});
   const title = nowPlaying.title;
   const artists = nowPlaying.artists;
-  const disabled = !nowPlaying.title ? true : false;
+  const disabled = !nowPlaying.title;
   const classes = classnames('now-playing', {
     'now-playing--disabled': disabled
   });
