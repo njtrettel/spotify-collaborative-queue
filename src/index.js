@@ -24,8 +24,8 @@ const getCookie = (cookieName) => {
   return "";
 };
 
-window.onSpotifyPlayerAPIReady = () => {
-  let accessToken = getCookie('accessToken');
+const initialize = () => {
+  const accessToken = getCookie('accessToken');
   const player = new Spotify.Player({
     name: 'Collaborative Play Queue',
     getOAuthToken: cb => { cb(accessToken); }
@@ -34,31 +34,41 @@ window.onSpotifyPlayerAPIReady = () => {
   // Error handling
   player.on('initialization_error', e => {
     console.error('init error', e);
+    player.disconnect();
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      window.location = referrer;
+      initialize();
+      //window.location = referrer;
     });
   });
   player.on('authentication_error', e => {
     console.error('auth error', e);
+    player.disconnect();
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      window.location = referrer;
+      initialize();
+      //window.location = referrer;
     });
   });
   player.on('account_error', e => {
     console.error('account error', e);
+    player.disconnect();
     const refreshToken = getCookie('refreshToken');
     refreshAccessToken(refreshToken).then((referrer) => {
-      window.location = referrer;
+      initialize();
+      //window.location = referrer;
     });
   });
   player.on('playback_error', e => {
+    ////////////// don't need to refresh here?
     console.error('playback error', e);
+    player.disconnect();
     const refreshToken = getCookie('refreshToken');
-    refreshAccessToken(refreshToken).then((referrer) => {
-      window.location = referrer;
-    });
+    /* refreshAccessToken(refreshToken).then((referrer) => {
+      initialize();
+      //window.location = referrer;
+    }); */
+    initialize();
   });
 
   player.on('ready', data => {
@@ -79,3 +89,5 @@ window.onSpotifyPlayerAPIReady = () => {
 
   player.connect();
 };
+
+window.onSpotifyPlayerAPIReady = initialize;
