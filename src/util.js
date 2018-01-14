@@ -44,6 +44,7 @@ export const withAuth = (execute, refreshToken, refreshCallback) => {
           return execute().catch(error => console.log('still error with spotify auth') || Promise.reject(error));
         }).catch(error => {
           console.log('something wrong with player refresh callback', error);
+          return Promise.reject(error);
         });
       }
       console.log('refresh player callback was not a function');

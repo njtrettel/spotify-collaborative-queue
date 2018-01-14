@@ -46,7 +46,7 @@ class Room extends React.Component {
   }
 
   listenForPlayerChanges() {
-    const player = this.props.SpotifyPlayer.getPlayer();
+    const player = this.props.player;
     const deviceId = this.props.deviceId;
     if (!player) {
       return false;
@@ -57,14 +57,14 @@ class Room extends React.Component {
       const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
       const duration = _.get(state, 'duration', 1);
       if ((currentTrack === previousTrack) && (duration === 0)) {
-        return this.props.nextSong((id) => roomTable.remove(id), deviceId, this.refreshSpotifyPlayer);
+        return this.props.nextSong((id) => this.state.roomTable.remove(id), deviceId, this.refreshSpotifyPlayer);
       }
       this.props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
     }).bind(this));
   }
 
   refreshSpotifyPlayer(accessToken) {
-    return this.props.SpotifyPlayer.refreshToken(accessToken).then(() => this.listenForPlayerChanges());
+    return this.props.refreshPlayer(accessToken).then(() => this.listenForPlayerChanges());
   }
 
   updateQueue(items) {
@@ -79,7 +79,7 @@ class Room extends React.Component {
   render() {
     console.log('rendering room');
     const classes = classnames(_.get(this.props, 'className', ''), 'room-content');
-    const childPropNames = ['SpotifyPlayer', 'deviceId', 'roomId'];
+    const childPropNames = ['player', 'deviceId', 'roomId'];
     const childProps = _.merge({}, _.pick(this.props, childPropNames), { addToRoomQueue: this.addToRoomQueue, refreshSpotifyPlayer: this.refreshSpotifyPlayer });
     return (
       <Grid columns={16} className={classes}>
@@ -101,7 +101,8 @@ class Room extends React.Component {
 
 Room.propTypes = {
   roomId: PropTypes.string.isRequired,
-  SpotifyPlayer: PropTypes.object.isRequired
+  player: PropTypes.object.isRequired,
+  refreshPlayer: PropTypes.func.isRequired
 };
 
 export default withRouter(connect(null, actions)(Room));

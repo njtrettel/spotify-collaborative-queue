@@ -1,73 +1,91 @@
+import React from 'react';
+import _ from 'lodash';
 import { getCookie, refreshAccessToken } from './util.js';
 
-export default class SpotifyPlayer {
-  constructor(accessToken) {
+export default class SpotifyPlayer extends React.Component {
+  constructor(props) {
+    super(props);
+    const accessToken = getCookie('accessToken');
+    if (!accessToken) {
+      throw new Error('no access token');
+    }
+
     console.log('creating SpotifyPlayer', accessToken);
-    this.player = new Spotify.Player({
+    this.initPlayer = this.initPlayer.bind(this);
+    this.refreshPlayer = this.refreshPlayer.bind(this);
+
+    const player = new Spotify.Player({
       name: 'Collaborative Play Queue',
       getOAuthToken: cb => cb(accessToken)
     });
-    this.connect = this.connect.bind(this);
-    this.initPlayer = this.initPlayer.bind(this);
-    this.refreshToken = this.refreshToken.bind(this);
+    this.state = {
+      player,
+      deviceId: null
+    };
   }
 
-  initPlayer(rerender = null) {
+  componentWillMount() {
+    console.log('SpotifyPlayer will mount');
+    this.initPlayer(this.state.player).then((deviceId) => {
+      console.log('player initilazed');
+      this.setState({ deviceId });
+    }).catch((error) => {});
+  }
+
+  initPlayer(player) {
     console.log('initiliazing player');
-    const player = this.player;
     if (!player) {
       console.log('no player');
       return Promise.reject('no player');
     }
-    // Error handling
+
     player.on('initialization_error', e => {
       console.error('init error', e);
     });
     player.on('authentication_error', e => {
       console.error('auth error', e);
-      this.player.disconnect();
+      player.disconnect();
       const refreshToken = getCookie('refreshToken');
       refreshAccessToken(refreshToken).then((accessToken => {
-        this.refreshToken(accessToken, rerender);
-        //window.location = referrer;
+        this.refreshPlayer(accessToken);
       }).bind(this));
     });
     player.on('account_error', e => {
       console.error('account error', e);
     });
     player.on('playback_error', e => {
-      ////////////// don't need to refresh here?
       console.error('playback error', e);
     });
 
     player.connect();
 
     return new Promise((resolve, reject) => {
-      this.player.on('ready', data => {
+      player.on('ready', data => {
         console.log('Ready with Device ID', data.device_id);
-        if (rerender) {
-          rerender(data.device_id);
-        }
         resolve(data.device_id);
       });
     });
   }
 
-  connect() {
-    this.player && this.player.connect();
-  }
-
-  refreshToken(accessToken, rerender) {
+  refreshPlayer(accessToken) {
     console.log('refreshing player');
-    this.player && this.player.disconnect();
-    this.player = new Spotify.Player({
+    this.state.player && this.state.player.disconnect();
+    const player = new Spotify.Player({
       name: 'Collaborative Play Queue',
       getOAuthToken: cb => cb(accessToken)
     });
-    return this.initPlayer(rerender).then((deviceId) => console.log('player ready', deviceId));
+    return this.initPlayer(player).then((deviceId => {
+      console.log('player ready', deviceId);
+      this.setState({ player, deviceId });
+      return deviceId;
+    }).bind(this));
   }
 
-  getPlayer() {
-    return this.player;
+  render() {
+    console.log('rendering SpotifyPlayer');
+    if (!this.state.deviceId) {
+      return <div>Waiting for player</div>;
+    }
+    return React.cloneElement(this.props.children, { player: this.state.player, deviceId: this.state.deviceId, refreshPlayer: this.refreshPlayer });
   }
 }

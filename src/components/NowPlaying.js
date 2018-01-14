@@ -20,8 +20,7 @@ const errorState = (error) => (
 );
 
 const NowPlaying = (props) => {
-  const SpotifyPlayer = _.get(props, 'SpotifyPlayer');
-  const player = _.isFunction(SpotifyPlayer.getPlayer) ? SpotifyPlayer.getPlayer() : null;
+  const player = _.get(props, 'player');
   if (!player) {
     return errorState();
   }
@@ -49,7 +48,7 @@ const NowPlaying = (props) => {
 };
 
 NowPlaying.propTypes = {
-  SpotifyPlayer: PropTypes.object.isRequired
+  player: PropTypes.object.isRequired
 };
 
 export default connect(stateToProps)(withRouter(NowPlaying));

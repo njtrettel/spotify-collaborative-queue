@@ -2,10 +2,12 @@ import React from 'react';
 import { Router } from 'react-router';
 import createBrowserHistory from 'history/createBrowserHistory'
 import { Switch, Route } from 'react-router-dom';
+import { getCookie } from '../util.js';
 import JoinRoom from './JoinRoom';
 import Room from './Room';
 import Header from './Header';
 import Footer from './Footer';
+import SpotifyPlayer from '../SpotifyPlayer';
 
 const history = createBrowserHistory();
 
@@ -20,7 +22,9 @@ const App = (props) => {
           return (
             <div className="main-app">
               <Header className="main-app__bar main-app__bar--header" />
-              <Room className="main-app__content" deviceId={props.deviceId} SpotifyPlayer={props.SpotifyPlayer} roomId={roomId} />
+              <SpotifyPlayer>
+                <Room className="main-app__content" roomId={roomId} />
+              </SpotifyPlayer>
               <Footer className="main-app__bar main-app__bar--footer" />
             </div>
           );
