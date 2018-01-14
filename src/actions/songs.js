@@ -43,7 +43,7 @@ const getSongsFailAction = (error) => {
   };
 };
 
-export const getSongs = () => (dispatch, getState) => {
+export const getSongs = (refreshCallback) => (dispatch, getState) => {
   const refreshToken = getCookie('refreshToken');
   const requestGetSongs = () => {
     const accessToken = getCookie('accessToken');
@@ -51,7 +51,7 @@ export const getSongs = () => (dispatch, getState) => {
   };
 
   dispatch(getSongsAction());
-  return withAuth(requestGetSongs, refreshToken).then((body) => {
+  return withAuth(requestGetSongs, refreshToken, refreshCallback).then((body) => {
     const total = _.get(body, 'total');
     let songs = _.get(body, 'items', []);
     if (total > 50) {

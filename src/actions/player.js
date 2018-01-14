@@ -100,7 +100,7 @@ const nextSongFailAction = (error) => {
   };
 };
 
-export const playSong = (deviceId, song) => (dispatch, getState) => {
+export const playSong = (deviceId, song, refreshCallback) => (dispatch, getState) => {
   const refreshToken = getCookie('refreshToken');
   const requestPlaySong = () => {
     const accessToken = getCookie('accessToken');
@@ -118,14 +118,14 @@ export const playSong = (deviceId, song) => (dispatch, getState) => {
   };
 
   dispatch(playSongAction());
-  return withAuth(requestPlaySong, refreshToken).then(() => {
+  return withAuth(requestPlaySong, refreshToken, refreshCallback).then(() => {
     // TODO handle song not available
     return dispatch(playSongSuccessAction());
   }).catch(error => dispatch(playSongFailAction(error)));
 };
 
 // this dispatches the same PLAY_SONG actions as the singular song version above
-export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
+export const playMultipleSongs = (deviceId, songs, refreshCallback) => (dispatch, getState) => {
   const refreshToken = getCookie('refreshToken');
   const shuffledSongs = _.shuffle(songs);
   const uriToPlay = _.get(shuffledSongs[0], 'uri', '');
@@ -145,7 +145,7 @@ export const playMultipleSongs = (deviceId, songs) => (dispatch, getState) => {
   };
 
   dispatch(playSongAction());
-  return withAuth(requestPlayMultipleSongs, refreshToken).then(() => {
+  return withAuth(requestPlayMultipleSongs, refreshToken, refreshCallback).then(() => {
     return dispatch(playSongSuccessAction(_.slice(shuffledSongs, 1)));
   }).catch(error => dispatch(playSongFailAction(error)));
 };
@@ -160,7 +160,7 @@ export const updateQueue = (songs) => (dispatch, getState) => {
   return Promise.resolve(dispatch(updateQueueSuccessAction(songs)));
 };
 
-export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
+export const nextSong = (deleteSong, deviceId, refreshCallback) => (dispatch, getState) => {
   console.log('next song');
   const context = getState().context;
   const queue = _.get(context.queue, 'songs', []);
@@ -176,7 +176,7 @@ export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
     const refreshToken = getCookie('refreshToken');
     const requestNextSong = () => {
       const accessToken = getCookie('accessToken');
-      console.log('requesting play song with token', accessToken);
+      console.log('requesting play song with token', accessToken, deviceId);
       const playOptions = {
         url: playSongUrl(deviceId),
         headers: {
@@ -190,7 +190,7 @@ export const nextSong = (deleteSong, deviceId) => (dispatch, getState) => {
       return rp.put(playOptions).then(() => console.log('next song success'));
     };
 
-    return withAuth(requestNextSong, refreshToken)
+    return withAuth(requestNextSong, refreshToken, refreshCallback)
       .then(() => dispatch(nextSongSuccessAction(playingFromQueue, nextSongToPlay)))
       .catch((error) => console.log('next song fail') || dispatch(nextSongFailAction(error)));
   }
