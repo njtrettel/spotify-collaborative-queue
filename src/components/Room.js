@@ -28,8 +28,6 @@ class Room extends React.Component {
     console.log('constructing room', props.roomId);
     const roomId = props.roomId;
     const roomTable = horizon(roomId);
-    const player = props.player;
-    const deviceId = props.deviceId;
     horizon.connect();
     horizon.onReady().subscribe(() => {
       console.log('horizon ready');
@@ -37,20 +35,36 @@ class Room extends React.Component {
     roomTable.watch().subscribe((items) => {
       this.updateQueue(items);
     });
-    player.on('player_state_changed', state => {
+    this.listenForPlayerChanges();
+
+    this.listenForPlayerChanges = this.listenForPlayerChanges.bind(this);
+    this.addToRoomQueue = this.addToRoomQueue.bind(this);
+    this.refreshSpotifyPlayer = this.refreshSpotifyPlayer.bind(this);
+    this.state = {
+      roomTable
+    };
+  }
+
+  listenForPlayerChanges() {
+    const player = this.props.SpotifyPlayer.getPlayer();
+    const deviceId = this.props.deviceId;
+    if (!player) {
+      return false;
+    }
+    player.on('player_state_changed', (state => {
       console.log('player state changed', state);
       const currentTrack = _.get(state, 'track_window.current_track.uri', '');
       const previousTrack = _.get(state, 'track_window.previous_tracks.0.uri', 'defaultNotEqual');
       const duration = _.get(state, 'duration', 1);
       if ((currentTrack === previousTrack) && (duration === 0)) {
-        return props.nextSong((id) => roomTable.remove(id), deviceId);
+        return this.props.nextSong((id) => roomTable.remove(id), deviceId, this.refreshSpotifyPlayer);
       }
-      props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
-    });
-    this.addToRoomQueue = this.addToRoomQueue.bind(this);
-    this.state = {
-      roomTable
-    };
+      this.props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
+    }).bind(this));
+  }
+
+  refreshSpotifyPlayer(accessToken) {
+    return this.props.SpotifyPlayer.refreshToken(accessToken).then(() => this.listenForPlayerChanges());
   }
 
   updateQueue(items) {
@@ -65,8 +79,8 @@ class Room extends React.Component {
   render() {
     console.log('rendering room');
     const classes = classnames(_.get(this.props, 'className', ''), 'room-content');
-    const childPropNames = ['player', 'deviceId', 'roomId'];
-    const childProps = _.merge({}, _.pick(this.props, childPropNames), { addToRoomQueue: this.addToRoomQueue });
+    const childPropNames = ['SpotifyPlayer', 'deviceId', 'roomId'];
+    const childProps = _.merge({}, _.pick(this.props, childPropNames), { addToRoomQueue: this.addToRoomQueue, refreshSpotifyPlayer: this.refreshSpotifyPlayer });
     return (
       <Grid columns={16} className={classes}>
         <Grid.Row className="room-content--wrapper">
@@ -86,7 +100,8 @@ class Room extends React.Component {
 };
 
 Room.propTypes = {
-  roomId: PropTypes.string.isRequired
+  roomId: PropTypes.string.isRequired,
+  SpotifyPlayer: PropTypes.object.isRequired
 };
 
 export default withRouter(connect(null, actions)(Room));
