@@ -29,17 +29,26 @@ export const refreshAccessToken = (refreshToken) => {
     json: true
   };
 
-  return rp.post(authOptions).then((referrer) => {
-    console.log('refreshed access token requested by: ', referrer);
-    return referrer;
+  return rp.post(authOptions).then(() => {
+    console.log('refreshed access token');
+    return getCookie('accessToken');
   });
 };
 
-export const withAuth = (execute, refreshToken) => {
+export const withAuth = (execute, refreshToken, refreshCallback) => {
   return execute().catch(error =>
-    console.log('error with spotify auth, refreshing access token') || refreshAccessToken(refreshToken).then(() =>
-      execute().catch(error => console.log('still error with spotify auth') || Promise.reject(error))
-    ).catch((error) => console.error('refreshing access token didn\'t work', error) || Promise.reject(error))
+    console.log('error with spotify auth, refreshing access token') || refreshAccessToken(refreshToken).then((accessToken) => {
+      if (_.isFunction(refreshCallback)) {
+        return refreshCallback(accessToken).then(() => {
+          console.log('refreshed player');
+          return execute().catch(error => console.log('still error with spotify auth') || Promise.reject(error));
+        }).catch(error => {
+          console.log('something wrong with player refresh callback', error);
+        });
+      }
+      console.log('refresh player callback was not a function');
+      return Promise.reject('refresh callback was not function')
+    }).catch((error) => console.error('refreshing access token didn\'t work', error) || Promise.reject(error))
   );
 };
 
