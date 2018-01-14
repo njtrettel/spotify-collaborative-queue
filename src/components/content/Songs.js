@@ -67,7 +67,8 @@ class Songs extends React.Component {
             <Button primary compact
               className="songs__shuffle-play"
               onClick={() => this.props.playMultipleSongs(this.props.deviceId,
-                _.get(this.props.songs, 'songs', [])
+                _.get(this.props.songs, 'songs', []),
+                this.props.refreshSpotifyPlayer
               )}
             >
               Shuffle Play
@@ -93,7 +94,7 @@ class Songs extends React.Component {
             <Table.Row key={i} className="songs__song">
               <Table.Cell className="songs__song--title">
                 <Header as='h4'>
-                  <Header.Content className="songs__song--clickable" onClick={() => this.props.playSong(this.props.deviceId, song)}>
+                  <Header.Content className="songs__song--clickable" onClick={() => this.props.playSong(this.props.deviceId, song, this.props.refreshSpotifyPlayer)}>
                       {_.get(song, 'title')}
                     <Header.Subheader>{_.get(song, 'artists')}</Header.Subheader>
                   </Header.Content>

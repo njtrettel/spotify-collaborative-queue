@@ -13,8 +13,19 @@ const stateToProps = (state, ownProps) => {
   };
 };
 
+const errorState = (error) => (
+  <div className="now-playing--error">
+    {error}
+  </div>
+);
+
 const NowPlaying = (props) => {
-  const player = _.get(props, 'player');
+  const SpotifyPlayer = _.get(props, 'SpotifyPlayer');
+  const player = _.isFunction(SpotifyPlayer.getPlayer) ? SpotifyPlayer.getPlayer() : null;
+  if (!player) {
+    return errorState();
+  }
+
   const nowPlaying = _.get(props, 'nowPlaying', {});
   const title = nowPlaying.title;
   const artists = nowPlaying.artists;
@@ -38,7 +49,7 @@ const NowPlaying = (props) => {
 };
 
 NowPlaying.propTypes = {
-  player: PropTypes.object.isRequired
+  SpotifyPlayer: PropTypes.object.isRequired
 };
 
 export default connect(stateToProps)(withRouter(NowPlaying));

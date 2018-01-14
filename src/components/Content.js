@@ -14,7 +14,7 @@ const Content = (props) => {
           const path = location.pathname + '/songs';
           return <Redirect to={path} />;
         }}/>
-        <Route path="/room/:roomId/songs" component={(routerProps) => <Songs deviceId={deviceId} addToRoomQueue={props.addToRoomQueue} {...routerProps} />}/>
+        <Route path="/room/:roomId/songs" component={(routerProps) => <Songs deviceId={deviceId} addToRoomQueue={props.addToRoomQueue} refreshSpotifyPlayer={props.refreshSpotifyPlayer} {...routerProps} />}/>
         <Route path="/room/:roomId/context" component={(routerProps) => <Context {...routerProps} />}/>
         <Route path="*" component={() => "Route not found"} />
       </Switch>

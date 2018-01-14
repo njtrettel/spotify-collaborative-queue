@@ -20,7 +20,7 @@ const App = (props) => {
           return (
             <div className="main-app">
               <Header className="main-app__bar main-app__bar--header" />
-              <Room className="main-app__content" deviceId={props.deviceId} player={props.player} roomId={roomId} />
+              <Room className="main-app__content" deviceId={props.deviceId} SpotifyPlayer={props.SpotifyPlayer} roomId={roomId} />
               <Footer className="main-app__bar main-app__bar--footer" />
             </div>
           );
