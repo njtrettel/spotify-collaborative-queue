@@ -5,6 +5,6 @@ import context from './context';
 
 const collaborativeQueueApp = combineReducers({
   songs, nowPlaying, context
-})
+});
 
 export default collaborativeQueueApp;
