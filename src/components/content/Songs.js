@@ -50,7 +50,7 @@ class Songs extends React.Component {
 
   componentWillMount() {
     if (_.isEmpty(_.get(this.props.songs, 'songs'))) {
-      this.props.getSongs();
+      this.props.getSongs(this.props.refreshSpotifyPlayer);
     }
   }
 
