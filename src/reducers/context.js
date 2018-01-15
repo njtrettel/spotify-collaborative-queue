@@ -14,7 +14,19 @@ import {
   NEXT_SONG_FAIL
 } from '../actions/player.js';
 
-const context = (state = { upNext: { loading: false, error: null, songs: [] }, queue: { loading: false, error: null, songs: [] } }, action) => {
+const initialState = {
+  upNext: {
+    loading: false, error: null, songs: []
+  },
+  queue: {
+    loading: false, error: null, songs: []
+  },
+  previouslyPlayed: {
+    songs: []
+  }
+};
+
+const context = (state = initialState, action) => {
   switch (action.type) {
     case PLAY_SONG:
       return {
@@ -23,7 +35,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           error: null,
           songs: state.upNext.songs
         },
-        queue: state.queue
+        queue: state.queue,
+        previouslyPlayed: state.previouslyPlayed
       };
     case PLAY_SONG_SUCCESS:
       return {
@@ -32,7 +45,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           error: null,
           songs: action.songs || state.upNext.songs
         },
-        queue: state.queue
+        queue: state.queue,
+        previouslyPlayed: { songs: _.concat(state.previouslyPlayed.songs, action.song) }
       };
     case PLAY_SONG_FAIL:
       return {
@@ -41,7 +55,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           error: action.error,
           songs: state.upNext.songs
         },
-        queue: state.queue
+        queue: state.queue,
+        previouslyPlayed: state.previouslyPlayed
       };
     case QUEUE_SONG:
       return {
@@ -50,7 +65,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: true,
           error: null,
           songs: state.queue.songs
-        }
+        },
+        previouslyPlayed: state.previouslyPlayed
       };
     case QUEUE_SONG_SUCCESS:
       return {
@@ -59,7 +75,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: false,
           error: null,
           songs: _.concat(state.queue.songs, action.song)
-        }
+        },
+        previouslyPlayed: state.previouslyPlayed
       };
     case QUEUE_SONG_FAIL:
       return {
@@ -68,7 +85,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: false,
           error: action.error,
           songs: state.queue.songs
-        }
+        },
+        previouslyPlayed: state.previouslyPlayed
       };
     case UPDATE_QUEUE:
       return {
@@ -77,7 +95,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: true,
           error: null,
           songs: state.queue.songs
-        }
+        },
+        previouslyPlayed: state.previouslyPlayed
       };
     case UPDATE_QUEUE_SUCCESS:
       const roomQueue = action.songs;
@@ -91,7 +110,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: false,
           error: null,
           songs: newQueue
-        }
+        },
+        previouslyPlayed: state.previouslyPlayed
       };
     case UPDATE_QUEUE_FAIL:
       return {
@@ -100,7 +120,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: false,
           error: action.error,
           songs: state.queue.songs
-        }
+        },
+        previouslyPlayed: state.previouslyPlayed
       };
     case NEXT_SONG:
       return {
@@ -113,7 +134,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: true,
           error: null,
           songs: state.queue.songs
-        } : state.queue
+        } : state.queue,
+        previouslyPlayed: state.previouslyPlayed
       };
     case NEXT_SONG_SUCCESS:
       return {
@@ -126,7 +148,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: false,
           error: null,
           songs: action.playingFromQueue ? _.slice(state.queue.songs, 1) || [] : state.queue.songs
-        }
+        },
+        previouslyPlayed: { songs: _.concat(state.previouslyPlayed.songs, action.song) }
       };
     case NEXT_SONG_FAIL:
       return {
@@ -139,7 +162,8 @@ const context = (state = { upNext: { loading: false, error: null, songs: [] }, q
           loading: false,
           error: action.error,
           songs: state.queue.songs
-        } : state.queue.songs
+        } : state.queue.songs,
+        previouslyPlayed: state.previouslyPlayed
       };
     default:
       return state;
