@@ -102,7 +102,8 @@ const context = (state = initialState, action) => {
       const roomQueue = action.songs;
       const localQueue = state.queue.songs;
       const localQueueTimestamps = _.map(localQueue, 'id');
-      const newSongsInQueue = _.reject(action.songs, (song) => _.includes(localQueueTimestamps, song.id));
+      const previouslyPlayedTimestamps = _.map(state.previouslyPlayed.songs, 'id');
+      const newSongsInQueue = _.reject(action.songs, (song) => (_.includes(localQueueTimestamps, song.id) || _.includes(previouslyPlayedTimestamps, song.id)));
       const newQueue = _.sortBy(_.concat(localQueue, newSongsInQueue), 'id');
       return {
         upNext: state.upNext,
