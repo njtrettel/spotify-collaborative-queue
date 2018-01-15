@@ -69,7 +69,10 @@ export default class SpotifyPlayer extends React.Component {
 
   refreshPlayer(accessToken) {
     console.log('refreshing player');
-    this.state.player && this.state.player.disconnect();
+    if (this.state.player) {
+      console.log('disconnecting old player');
+      this.state.player.disconnect();
+    }
     const player = new Spotify.Player({
       name: 'Collaborative Play Queue',
       getOAuthToken: cb => cb(accessToken)
