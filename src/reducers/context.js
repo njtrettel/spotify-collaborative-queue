@@ -39,11 +39,12 @@ const context = (state = initialState, action) => {
         previouslyPlayed: state.previouslyPlayed
       };
     case PLAY_SONG_SUCCESS:
+      const newUpNext = (action.upNext.length === 0) ? state.upNext.songs : action.upNext;
       return {
         upNext: {
           loading: false,
           error: null,
-          songs: action.upNext || state.upNext.songs
+          songs: newUpNext
         },
         queue: state.queue,
         previouslyPlayed: { songs: _.concat(state.previouslyPlayed.songs, action.song) }
