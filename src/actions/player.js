@@ -35,7 +35,8 @@ const playSongSuccessAction = (song, upNext = []) => {
 
 const playSongFailAction = (error) => {
   return {
-    type: PLAY_SONG_FAIL
+    type: PLAY_SONG_FAIL,
+    error
   };
 };
 
@@ -102,6 +103,11 @@ const nextSongFailAction = (error) => {
 };
 
 export const playSong = (deviceId, song, refreshCallback) => (dispatch, getState) => {
+  const context = getState().context;
+  const loading = context.upNext.loading || context.queue.loading;
+  if (loading) {
+    return dispatch(playSongFailAction('cannot play song in the middle of another play song request'));
+  }
   const refreshToken = getCookie('refreshToken');
   const requestPlaySong = () => {
     const accessToken = getCookie('accessToken');
@@ -128,6 +134,11 @@ export const playSong = (deviceId, song, refreshCallback) => (dispatch, getState
 
 // this dispatches the same PLAY_SONG actions as the singular song version above
 export const playMultipleSongs = (deviceId, songs, refreshCallback) => (dispatch, getState) => {
+  const context = getState().context;
+  const loading = context.upNext.loading || context.queue.loading;
+  if (loading) {
+    return dispatch(playSongFailAction('cannot play song in the middle of another play song request'));
+  }
   const refreshToken = getCookie('refreshToken');
   const shuffledSongs = _.shuffle(songs);
   const songToPlay = _.get(shuffledSongs, '0', {});
@@ -169,6 +180,10 @@ export const nextSong = (deleteSong, deviceId, refreshCallback) => (dispatch, ge
   const context = getState().context;
   const queue = _.get(context.queue, 'songs', []);
   const upNext = _.get(context.upNext, 'songs', []);
+  const loading = context.upNext.loading || context.queue.loading;
+  if (loading) {
+    return dispatch(nextSongFailAction('cannot play song in the middle of another play song request'));
+  }
   const playingFromQueue = !_.isEmpty(queue);
   const nextSongToPlay = playingFromQueue ? queue[0] : upNext[0];
   if (playingFromQueue && _.get(queue[0], 'source', '') === deviceId) {
