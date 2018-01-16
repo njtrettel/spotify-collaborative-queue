@@ -43,7 +43,7 @@ const context = (state = initialState, action) => {
         upNext: {
           loading: false,
           error: null,
-          songs: action.songs || state.upNext.songs
+          songs: action.upNext || state.upNext.songs
         },
         queue: state.queue,
         previouslyPlayed: { songs: _.concat(state.previouslyPlayed.songs, action.song) }
