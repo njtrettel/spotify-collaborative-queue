@@ -159,12 +159,12 @@ const context = (state = initialState, action) => {
           loading: false,
           error: action.error,
           songs: state.upNext.songs
-        } : state.upNext.songs,
+        } : state.upNext,
         queue: action.playingFromQueue ? {
           loading: false,
           error: action.error,
           songs: state.queue.songs
-        } : state.queue.songs,
+        } : state.queue,
         previouslyPlayed: state.previouslyPlayed
       };
     default:
