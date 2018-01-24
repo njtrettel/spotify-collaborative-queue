@@ -7,7 +7,7 @@ import JoinRoom from './JoinRoom';
 import Room from './Room';
 import Header from './Header';
 import Footer from './Footer';
-import SpotifyPlayer from '../SpotifyPlayer';
+import SpotifyPlayer from './SpotifyPlayer';
 
 const history = createBrowserHistory();
 

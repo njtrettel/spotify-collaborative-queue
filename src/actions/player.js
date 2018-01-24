@@ -1,6 +1,7 @@
 import rp from 'request-promise';
 import _ from 'lodash';
 import { getCookie, withAuth } from '../util';
+import { updateNowPlaying } from './nowPlaying';
 
 export const PLAY_SONG = 'PLAY_SONG';
 export const PLAY_SONG_SUCCESS = 'PLAY_SONG_SUCCESS';
@@ -24,11 +25,11 @@ const playSongAction = () => {
   };
 };
 
-// `songs` will become upNext
-const playSongSuccessAction = (songs) => {
+const playSongSuccessAction = (song, upNext = []) => {
   return {
     type: PLAY_SONG_SUCCESS,
-    songs
+    song,
+    upNext
   };
 };
 
@@ -85,7 +86,7 @@ const nextSongAction = (playingFromQueue) => {
   };
 };
 
-const nextSongSuccessAction = (playingFromQueue, song) => {
+const nextSongSuccessAction = (song, playingFromQueue) => {
   return {
     type: NEXT_SONG_SUCCESS,
     playingFromQueue,
@@ -120,7 +121,8 @@ export const playSong = (deviceId, song, refreshCallback) => (dispatch, getState
   dispatch(playSongAction());
   return withAuth(requestPlaySong, refreshToken, refreshCallback).then(() => {
     // TODO handle song not available
-    return dispatch(playSongSuccessAction());
+    updateNowPlaying(song)(dispatch, getState);
+    return dispatch(playSongSuccessAction(song));
   }).catch(error => dispatch(playSongFailAction(error)));
 };
 
@@ -128,7 +130,8 @@ export const playSong = (deviceId, song, refreshCallback) => (dispatch, getState
 export const playMultipleSongs = (deviceId, songs, refreshCallback) => (dispatch, getState) => {
   const refreshToken = getCookie('refreshToken');
   const shuffledSongs = _.shuffle(songs);
-  const uriToPlay = _.get(shuffledSongs[0], 'uri', '');
+  const songToPlay = _.get(shuffledSongs, '0', {});
+  const uriToPlay = _.get(songToPlay, 'uri', '');
   const requestPlayMultipleSongs = () => {
     const accessToken = getCookie('accessToken');
     const playOptions = {
@@ -146,7 +149,8 @@ export const playMultipleSongs = (deviceId, songs, refreshCallback) => (dispatch
 
   dispatch(playSongAction());
   return withAuth(requestPlayMultipleSongs, refreshToken, refreshCallback).then(() => {
-    return dispatch(playSongSuccessAction(_.slice(shuffledSongs, 1)));
+    updateNowPlaying(songToPlay)(dispatch, getState);
+    return dispatch(playSongSuccessAction(songToPlay, _.slice(shuffledSongs, 1)));
   }).catch(error => dispatch(playSongFailAction(error)));
 };
 
@@ -191,8 +195,10 @@ export const nextSong = (deleteSong, deviceId, refreshCallback) => (dispatch, ge
     };
 
     return withAuth(requestNextSong, refreshToken, refreshCallback)
-      .then(() => dispatch(nextSongSuccessAction(playingFromQueue, nextSongToPlay)))
-      .catch((error) => console.log('next song fail') || dispatch(nextSongFailAction(error)));
+      .then(() => {
+        updateNowPlaying(nextSongToPlay)(dispatch, getState);
+        return dispatch(nextSongSuccessAction(nextSongToPlay, playingFromQueue));
+      }).catch((error) => console.log('next song fail') || dispatch(nextSongFailAction(error)));
   }
   console.log('no next song');
   return Promise.resolve(dispatch(nextSongSuccessAction()));

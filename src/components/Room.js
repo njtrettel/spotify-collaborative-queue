@@ -9,12 +9,10 @@ import { Grid } from 'semantic-ui-react';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import NowPlaying from './NowPlaying';
-import { updateNowPlaying } from '../actions/nowPlaying';
 import { nextSong, updateQueue } from '../actions/player';
 import config from '../../config';
 
 const actions = {
-  updateNowPlaying,
   nextSong,
   updateQueue
 };
@@ -59,7 +57,6 @@ class Room extends React.Component {
       if ((currentTrack === previousTrack) && (duration === 0)) {
         return this.props.nextSong((id) => this.state.roomTable.remove(id), deviceId, this.refreshSpotifyPlayer);
       }
-      this.props.updateNowPlaying(_.get(state, 'track_window.current_track', {}));
     }).bind(this));
   }
 

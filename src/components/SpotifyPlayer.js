@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { getCookie, refreshAccessToken } from './util.js';
+import { getCookie, refreshAccessToken } from '../util.js';
 
 export default class SpotifyPlayer extends React.Component {
   constructor(props) {
