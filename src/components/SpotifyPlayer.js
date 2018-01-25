@@ -27,13 +27,13 @@ export default class SpotifyPlayer extends React.Component {
   componentWillMount() {
     console.log('SpotifyPlayer will mount');
     this.initPlayer(this.state.player).then((deviceId) => {
-      console.log('player initilazed');
+      console.log('player initialazed');
       this.setState({ deviceId });
-    }).catch((error) => {});
+    }).catch((error) => console.log('error initializing player', error));
   }
 
   initPlayer(player) {
-    console.log('initiliazing player');
+    console.log('initialiazing player');
     if (!player) {
       console.log('no player');
       return Promise.reject('no player');
@@ -85,10 +85,16 @@ export default class SpotifyPlayer extends React.Component {
   }
 
   render() {
-    console.log('rendering SpotifyPlayer');
+    console.log('rendering SpotifyPlayer', this.props);
     if (!this.state.deviceId) {
       return <div>Waiting for player</div>;
     }
-    return React.cloneElement(this.props.children, { player: this.state.player, deviceId: this.state.deviceId, refreshPlayer: this.refreshPlayer });
+
+    const player = this.state.player;
+    const deviceId = this.state.deviceId;
+    const refreshPlayer = this.refreshPlayer;
+    return _.map(this.props.children, (child, i) => (
+      React.cloneElement(child, { player, deviceId, refreshPlayer, key: i })
+    ));
   }
 }
