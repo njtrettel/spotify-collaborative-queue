@@ -55,7 +55,7 @@ const Context = (props) => {
   return (
     <div className={classes}>
       <Header as='h1' className="context__header">Now Playing</Header>
-      {_.some(nowPlaying) ? renderSong(nowPlaying) : null}
+      {_.some(nowPlaying.song) ? renderSong(nowPlaying.song) : null}
       <Header as='h1' className="context__header">Queue</Header>
       {_.some(queue.songs) ? renderSection(queue) : null}
       <Header as='h1' className="context__header">Up Next</Header>
