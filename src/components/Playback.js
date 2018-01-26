@@ -14,14 +14,14 @@ class Playback extends React.Component {
   constructor() {
     super();
     this.state = {
-      progress: 0
+      progress: 0,
+      secondsPassed: 0
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const currentlyPlaying = this.props.nowPlaying;
     const nextPropsPlaying = nextProps.nowPlaying;
-    console.log('PLAYBACK will receive props', currentlyPlaying, nextPropsPlaying);
     if (currentlyPlaying.song.uri !== nextPropsPlaying.song.uri) {
       this.state.currentTimer && clearTimeout(this.state.currentTimer);
       this.setState({ progress: 0 });
@@ -30,7 +30,11 @@ class Playback extends React.Component {
 
   componentDidUpdate() {
     if (this.props.nowPlaying.playing) {
-      this.state.currentTimer = setTimeout(() => this.setState({ progress: this.state.progress + 200 }), 200);
+      this.state.currentTimer = setTimeout(() => {
+        const newProgress = this.state.progress + 200;
+        const secondsPassed = (newProgress / 1000).toFixed(0);
+        this.setState({ progress: this.state.progress + 200, secondsPassed })
+      }, 200);
     }
   }
 
@@ -41,8 +45,16 @@ class Playback extends React.Component {
     }
     const classes = classnames(this.props.className, 'playback');
     const isPlaying = this.props.nowPlaying.playing;
-    const duration = this.props.nowPlaying.song.duration;
+    const duration = this.props.nowPlaying.song.duration || 0;
     const percentPlayed = duration ? (this.state.progress * 100 / duration) : 0;
+
+    const durationMinutes = (duration / 60000).toFixed(0);
+    const durationSeconds = ((duration % 60000) / 1000).toFixed(0);
+    const prettyDuration = `${durationMinutes}:${('0' + durationSeconds).slice(-2)}`;
+
+    const minutesPassed = (this.state.secondsPassed / 60).toFixed(0);
+    const secondsPassed = this.state.secondsPassed % 60;
+    const prettySecondsPassed = `${minutesPassed}:${('0' + secondsPassed).slice(-2)}`;
     return (
       <div className={classes}>
         <div className="playback__controls">
@@ -52,7 +64,11 @@ class Playback extends React.Component {
           </div>
           <div className="playback__control playback__control--next" onClick={() => player.nextTrack()}>&#8631;</div>
         </div>
-        <Progress className="playback__progress" size="tiny" percent={percentPlayed} />
+        <div className="playback__progress">
+          <div className="playback__progress--seconds">{prettySecondsPassed}</div>
+          <Progress size="tiny" className="playback__progress--bar" percent={percentPlayed} />
+          <div className="playback__progress--duration">{prettyDuration}</div>
+        </div>
       </div>
     );
   }

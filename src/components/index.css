@@ -183,21 +183,41 @@ body {
 }
 
 /* PLAYBACK */
+.playback {
+  align-self: center;
+}
+
 .playback__progress {
+  display: flex;
+}
+
+.playback__progress--bar {
   border: .5px solid #888 !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .playback__progress .bar {
   min-width: 0 !important;
 }
 
-.playback {
+.playback__progress--seconds,
+.playback__progress--duration {
+  font-size: .7rem;
+  width: 6%;
   align-self: center;
+}
+
+.playback__progress--duration {
+  text-align: right;
+}
+
+.playback__progress--bar {
+  width: 88%;
 }
 
 .playback__controls {
   text-align: center;
-  margin-bottom: 10px;
 }
 
 .playback__control {
