@@ -1,6 +1,6 @@
 import {
   UPDATE_NOW_PLAYING,
-  PLAY,
+  RESUME,
   PAUSE
 } from '../actions/nowPlaying';
 import { reduceSpotifyTrack } from '../util';
@@ -15,17 +15,17 @@ const nowPlaying = (state = initialState, action) => {
         paused: false,
         song: action.song
       };
-    case PLAY:
+    case RESUME:
       return {
         playing: true,
         paused: false,
-        song: action.song
+        song: state.song
       };
     case PAUSE:
       return {
         playing: false,
         paused: true,
-        song: action.song
+        song: state.song
       };
     default:
       return state;

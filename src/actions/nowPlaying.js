@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { getCookie } from '../util';
 
 export const UPDATE_NOW_PLAYING = 'UPDATE_NOW_PLAYING';
-export const PLAY = 'PLAY';
+export const RESUME = 'RESUME';
 export const PAUSE = 'PAUSE';
 
 const updateNowPlayingAction = (song) => ({
@@ -11,8 +11,8 @@ const updateNowPlayingAction = (song) => ({
   song
 });
 
-const playAction = () => ({
-  type: PLAY
+const resumeAction = () => ({
+  type: RESUME
 });
 
 const pauseAction = () => ({
@@ -23,8 +23,8 @@ export const updateNowPlaying = (song) => (dispatch, getState) => {
   return dispatch(updateNowPlayingAction(song));
 };
 
-export const play = () => (dispatch) => {
-  return dispatch(playAction());
+export const resume = () => (dispatch) => {
+  return dispatch(resumeAction());
 };
 
 export const pause = () => (dispatch) => {
