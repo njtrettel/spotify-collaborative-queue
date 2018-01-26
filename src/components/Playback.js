@@ -48,7 +48,7 @@ class Playback extends React.Component {
     const duration = this.props.nowPlaying.song.duration || 0;
     const percentPlayed = duration ? (this.state.progress * 100 / duration) : 0;
 
-    const durationMinutes = (duration / 60000).toFixed(0);
+    const durationMinutes = Math.floor(duration / 60000);
     const durationSeconds = ((duration % 60000) / 1000).toFixed(0);
     const prettyDuration = `${durationMinutes}:${('0' + durationSeconds).slice(-2)}`;
 
