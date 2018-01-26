@@ -1,35 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import classnames from 'classnames';
-import { Segment } from 'semantic-ui-react';
-
-const stateToProps = (state, ownProps) => {
-  const nowPlaying = state.nowPlaying;
-  return {
-    nowPlaying
-  };
-};
-
-const errorState = (error) => (
-  <div className="now-playing--error">
-    {error}
-  </div>
-);
 
 const NowPlaying = (props) => {
-  const player = _.get(props, 'player');
-  if (!player) {
-    return errorState();
-  }
-
-  const nowPlaying = _.get(props, 'nowPlaying', {});
-  const title = nowPlaying.title;
-  const artists = nowPlaying.artists;
-  const disabled = !nowPlaying.title;
-  const classes = classnames('now-playing', {
+  console.log('rendering NowPlaying', props);
+  const nowPlayingSong = _.get(props, 'nowPlaying.song', {});
+  const title = nowPlayingSong.title;
+  const artists = nowPlayingSong.artists;
+  const albumArtUrl = nowPlayingSong.albumArt;
+  const disabled = !nowPlayingSong.title;
+  const classes = classnames(props.className, 'now-playing', {
     'now-playing--disabled': disabled
   });
   const roomId = _.get(props, 'roomId', '');
@@ -37,18 +19,18 @@ const NowPlaying = (props) => {
 
   return (
     <div className={classes}>
-      <div className="now-playing__previous" onClick={() => !disabled && player.previousTrack()}>&#8630;</div>
-      <Link to={pathToContext} className="now-playing__song-info">
-        <h4 className="now-playing__song-info--title">{title || '-----'}</h4>
-        <h6 className="now-playing__song-info--artists">{artists || '---'}</h6>
-      </Link>
-      <div className="now-playing__next" onClick={() => !disabled && player.nextTrack()}>&#8631;</div>
+      <div className="now-playing__album-art"><img src={albumArtUrl} /></div>
+      <div className="now-playing__song">
+        <div className="now-playing__song-info now-playing__song-info--title"><span>{title || '-----'}</span></div>
+        <div className="now-playing__song-info now-playing__song-info--artists"><span>{artists || '---'}</span></div>
+      </div>
     </div>
   );
 };
 
 NowPlaying.propTypes = {
-  player: PropTypes.object.isRequired
+  nowPlaying: PropTypes.object.isRequired
 };
 
-export default connect(stateToProps)(withRouter(NowPlaying));
+
+export default NowPlaying;
