@@ -59,7 +59,16 @@ class Playback extends React.Component {
       <div className={classes}>
         <div className="playback__controls">
           <div className="playback__control playback__control--previous" onClick={() => player.previousTrack()}>&#8630;</div>
-          <div className="playback__control playback__control--plause" onClick={() => isPlaying ? player.pause() : player.resume()}>
+          <div className="playback__control playback__control--plause"
+            onClick={() => {
+              if (isPlaying) {
+                this.props.pause();
+                player.pause();
+              } else {
+                this.props.resume();
+                player.resume();
+              }
+            }}>
             {isPlaying ? 'PAUSE' : 'RESUME'}
           </div>
           <div className="playback__control playback__control--next" onClick={() => player.nextTrack()}>&#8631;</div>
