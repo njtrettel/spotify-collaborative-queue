@@ -52,7 +52,7 @@ class Playback extends React.Component {
           </div>
           <div className="playback__control playback__control--next" onClick={() => player.nextTrack()}>&#8631;</div>
         </div>
-        <Progress size="tiny" percent={percentPlayed} />
+        <Progress className="playback__progress" size="tiny" percent={percentPlayed} />
       </div>
     );
   }
