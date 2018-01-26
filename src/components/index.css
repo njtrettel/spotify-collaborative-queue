@@ -10,6 +10,11 @@ body {
   height: 100%;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* MAIN APP */
 .main-app {
   min-height: 100%;
@@ -141,7 +146,6 @@ body {
 
 /* NOW PLAYING */
 .now-playing {
-  text-decoration: none;
   display: flex;
 }
 
