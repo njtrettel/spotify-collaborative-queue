@@ -55,6 +55,7 @@ export const withAuth = (execute, refreshToken, refreshCallback) => {
 
 export const reduceSpotifyTrack = (song) => {
   const albumName = _.get(song, 'album.name', '');
+  const albumArt = _.get(song, ['album', 'images', '0', 'url']);
   const artists = _.get(song, 'artists', []);
   const parsedArtists = _.reduce(artists, (artistString, artist, i) => {
     const artistName = _.get(artist, 'name');
@@ -71,6 +72,7 @@ export const reduceSpotifyTrack = (song) => {
     artists: parsedArtists,
     title: songTitle,
     duration,
+    albumArt,
     uri
   };
 };
