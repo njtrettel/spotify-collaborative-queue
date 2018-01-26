@@ -149,12 +149,12 @@ body {
 }
 
 .now-playing__album-art {
-  width: 20%;
   margin-right: 1rem;
 }
 
 .now-playing__album-art img {
-  width: 100%;
+  width: 70px;
+  min-width: 70px;
 }
 
 .now-playing__song {
@@ -162,10 +162,15 @@ body {
   display: flex;
   flex-direction: column;
   align-self: center;
+  padding-right: 1rem;
+  width: calc(100% - 70px - 1rem);
 }
 
 .now-playing__song-info {
   display: inline;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .now-playing__song-info--title {
