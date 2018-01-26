@@ -24,7 +24,7 @@ const App = (props) => {
               <Header className="main-app__bar main-app__bar--header" />
               <SpotifyPlayer>
                 <Room className="main-app__content" roomId={roomId} />
-                <Footer className="main-app__bar main-app__bar--footer" />
+                <Footer className="main-app__bar main-app__bar--footer" roomId={roomId} />
               </SpotifyPlayer>
             </div>
           );

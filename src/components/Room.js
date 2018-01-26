@@ -8,7 +8,6 @@ import Horizon from '@horizon/client';
 import { Grid } from 'semantic-ui-react';
 import Sidebar from './Sidebar';
 import Content from './Content';
-import NowPlaying from './NowPlaying';
 import { nextSong, updateQueue } from '../actions/player';
 import config from '../../config';
 
@@ -84,7 +83,6 @@ class Room extends React.Component {
           <Grid.Column width={3} className="room-content__column room-content__column--sidebar">
             <div className="room-content__column--wrapper">
               <Sidebar {...childProps} />
-              <NowPlaying {...childProps} />
             </div>
           </Grid.Column>
           <Grid.Column width={13} className="room-content__column room-content__column--main">
