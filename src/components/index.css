@@ -193,8 +193,9 @@ body {
 
 .playback__progress--bar {
   border: .5px solid #888 !important;
-  margin-top: 1rem !important;
-  margin-bottom: 1rem !important;
+  margin-top: .5rem !important;
+  margin-bottom: .75rem !important;
+  width: 88%;
 }
 
 .playback__progress .bar {
@@ -212,16 +213,16 @@ body {
   text-align: right;
 }
 
-.playback__progress--bar {
-  width: 88%;
-}
-
 .playback__controls {
   text-align: center;
 }
 
 .playback__control {
   display: inline;
+}
+
+.playback__control--icon {
+  width: 30px;
 }
 
 .playback__control--plause {

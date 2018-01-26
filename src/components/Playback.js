@@ -69,7 +69,7 @@ class Playback extends React.Component {
                 player.resume();
               }
             }}>
-            {isPlaying ? 'PAUSE' : 'RESUME'}
+            <img className="playback__control--icon" src={isPlaying ? '/pause.png' : '/play.png'} />
           </div>
           <div className="playback__control playback__control--next" onClick={() => player.nextTrack()}>&#8631;</div>
         </div>
