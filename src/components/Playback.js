@@ -23,18 +23,15 @@ class Playback extends React.Component {
     const nextPropsPlaying = nextProps.nowPlaying;
     console.log('PLAYBACK will receive props', currentlyPlaying, nextPropsPlaying);
     if (currentlyPlaying.song.uri !== nextPropsPlaying.song.uri) {
+      this.state.currentTimer && clearTimeout(this.state.currentTimer);
       this.setState({ progress: 0 });
     }
   }
 
   componentDidUpdate() {
     if (this.props.nowPlaying.playing) {
-      this.increaseCounter();
+      this.state.currentTimer = setTimeout(() => this.setState({ progress: this.state.progress + 200 }), 200);
     }
-  }
-
-  increaseCounter() {
-    setTimeout(() => this.setState({ progress: this.state.progress + 200 }), 200);
   }
 
   render() {
